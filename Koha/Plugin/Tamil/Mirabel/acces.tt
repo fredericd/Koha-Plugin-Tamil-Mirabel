@@ -1,0 +1,30 @@
+[% INCLUDE "$PLUGIN_DIR/head.tt" %]
+
+<h1>Mes accès</h1>
+<p>
+  Ceci est la liste de mes accès aux revues de Mir@bel en tant que partenaire. 
+</p>
+<table>
+ <thead>
+  <tr>
+   <th>Ressource</th>
+   <th>Titres</th>
+   <th>Contenu</th>
+   <th>Diffusion</th>
+   <th>Période</th>
+  </tr>
+ </thead>
+ <tbody>
+  [% FOREACH a IN acces %]
+   <tr>
+     <td><a href="[% a.url %]">[% a.ressource %]</a></td>
+     <td>[% a.titre.titre %]</td>
+     <td>[% a.contenu %]</td>
+     <td>[% a.diffusion %]</td>
+     <td>[% a.datedebut %] - [% a.datefin %]</td>
+   </tr>
+  [% END %]
+ </tbody>
+</table>
+
+[% INCLUDE "$PLUGIN_DIR/foot.tt" %]

@@ -1,0 +1,34 @@
+[% INCLUDE 'doc-head-open.inc' %]
+ <title>Extension Mir@bel</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+ <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
+ <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a> &rsaquo; Mir@bel
+</div>
+
+<div class="main container-fluid">
+ <div class="row-fluid">
+
+  <div class="col-md-2">
+   <div id="navmenu">
+    <ul>
+     <a href="https://reseau-mirabel.info" alt="Site web du réseau Mir@bel">
+      <img src="[% PLUGIN_PATH %]/img/logo-mirabel.png"/>
+     </a>
+     <ul>
+      <li><a href="?class=[% CLASS %]&method=tool">Accueil </a></li>
+      <li><a href="?class=[% CLASS %]&method=tool&tool=acces">Mes accès</a></li>
+      <li><a href="?class=[% CLASS %]&method=tool&tool=titres">Mes titres</a></li>
+      <li><a href="?class=[% CLASS %]&method=configure">Configuration </a></li>
+     </ul>
+    </ul>
+   </div>
+  </div>
+
+  <div class="col-md-10">
+  

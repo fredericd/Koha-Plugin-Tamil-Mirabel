@@ -1,0 +1,98 @@
+[% INCLUDE "$PLUGIN_DIR/head.tt" %]
+
+<h1>Configuration de Koha ⇄ Mir@bel</h1>
+
+<form method="get">
+
+ <input type="hidden" name="class" value="[% CLASS %]"/>
+ <input type="hidden" name="method" value="[% METHOD %]"/>
+
+ <fieldset class="rows">
+  <legend>Accès à Mir@bel</legend>
+  <ol>
+   <li>
+    <label for="url.web">Site Web :</label>
+    <input id="url.web" type="text" name="url.web" size="50" value="[% c.url.web %]" />
+   </li>
+   <li>
+    <label for="url.api">Services web :</label>
+    <input id="url.api" type="text" name="url.api" size="50" value="[% c.url.api %]" />
+   </li>
+   <li>
+    <label for="url.timeout">Timeout en secondes :</label>
+    <input id="url.timeout" type="text" name="url.timeout" size="50" value="[% c.url.timeout %]" />
+   </li>
+  </ol>
+ </fieldset>
+
+ <fieldset class="rows">
+  <legend>Partenaire Mir@bel</legend>
+  <ol>
+   <li>
+    <label for="partenaire.id">ID Partenaire : </label>
+    <input id="partenaire.id" type="text" name="partenaire.id" size="15" value="[% c.partenaire.id %]" />
+   </li>
+   <li>
+    <label for="partenaire.cle">Clé privée : </label>
+    <input id="partenaire.cle" type="text" name="partenaire.cle" size="15" value="[% c.partenaire.cle %]" />
+   </li>
+  </ol>
+ </fieldset>
+
+ <fieldset class="rows">
+  <legend>Liste des revues</legend>
+  <ol>
+   <li>
+    <label for="opac.liste.template">Template : </label>
+    <pre><textarea id="opac.liste.template" name="opac.liste.template" rows="15" cols="100">[% c.opac.liste.template %]</textarea></pre>
+    <br>Attention ! Soyez prudent si vous modifiez le template par défaut.</span>
+   </li>
+  </ol>
+ </fieldset>
+
+ <fieldset class="rows">
+  <legend>Affichage avec les notices à l'OPAC</legend>
+  <ol>
+   <li>
+    <label for="opac.biblio.active">Activer : </label>
+    <input id="opac.biblio.active" type="checkbox" name="opac.biblio.active" size="15" value="1" [% IF c.opac.biblio.active == 1 %]checked[% END %] />
+   </li>
+   <li>
+    <label for="location" style="height: 50px;">Emplacement : </label>
+    <input type="radio" name="opac.biblio.affiche.ou" value="div" [% IF c.opac.biblio.affiche.ou == 'div' %]checked[% END %]/>
+    Dans le pavé biblio, après le champ identifié par cet id :
+    <input id="opac.biblio.affiche.id" type="text" name="opac.biblio.affiche.id" size="15" value="[% c.opac.biblio.affiche.id %]" /> 
+    <br/>
+    <input type="radio" name="opac.biblio.affiche.ou" value="ex_dessus" [% IF c.opac.biblio.affiche.ou == 'ex_dessus' %]checked[% END %] />
+    Entre le pavé biblio et celui des exemplaires
+    <br/>
+    <input type="radio" name="opac.biblio.affiche.ou" value="ex_dans" [% IF c.opac.biblio.affiche.ou == 'ex_dans' %]checked[% END %] />
+    Dans un nouvel onglet du pavé des exemplaires
+   </li>
+   <li>
+    <label for="opac.biblio.cherche" style="height: 50px;">Recherche par : </label>
+    <input type="radio" name="opac.biblio.cherche" value="issn" [% IF c.opac.biblio.cherche == 'issn' %]checked[% END %]/>
+    ISSN
+    <br/>
+    <input type="radio" name="opac.biblio.cherche" value="biblionumber" [% IF c.opac.biblio.cherche == 'biblionumber' %]checked[% END %]/>
+    biblionumber
+    <br/>
+    <input type="radio" name="opac.biblio.cherche" value="ppn" [% IF c.opac.biblio.cherche == 'ppn' %]checked[% END %]/>
+    PPN
+   </li>
+   <li>
+    <label for="opac.biblio.template">Template : </label>
+    <pre><textarea id="opac.biblio.template" name="opac.biblio.template" rows="15" cols="100">[% c.opac.biblio.template %]</textarea></pre>
+    <br>Attention ! Soyez prudent si vous modifiez le template par défaut.</span>
+   </li>
+  </ol>
+ </fieldset>
+
+ <fieldset class="action">
+  <input type="hidden" name="save" value="1" />
+  <input type="submit" value="Enregistrer" />
+ </fieldset>
+
+</form>
+
+[% INCLUDE "$PLUGIN_DIR/foot.tt" %]
