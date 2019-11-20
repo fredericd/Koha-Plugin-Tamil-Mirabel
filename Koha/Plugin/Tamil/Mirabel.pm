@@ -267,7 +267,7 @@ sub get_titres {
 
     my $titres = $self->{cache}->get_from_cache('titres');
     unless ($titres) {
-        if ( $titres = $self->ws('/mes/titres') ) {
+        if ( $titres = $self->ws('/mes/titres', {possession=>1}) ) {
             for my $titre (@$titres) {
                 my $id = $titre->{revueid};
                 $titre->{acces} = $self->ws('/acces/revue', {revueid => $id});
@@ -301,7 +301,7 @@ sub get_all_acces {
 
     my $acces = $self->{cache}->get_from_cache('acces');
     unless ($acces) {
-        if ( $acces = $self->ws('/mes/acces') ) {
+        if ( $acces = $self->ws('/mes/acces', {possession => 1}) ) {
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
             my %titre = map { $_->{titreid} => {} } @$acces;
             for my $id ( keys %titre ) {
@@ -325,7 +325,7 @@ sub get_acces {
     my $key = "acces_$id";
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
-        if ( $acces = $self->ws('/acces/titres', {issn => $id}) ) {
+        if ( $acces = $self->ws('/acces/titres', {issn => $id, possession => 1}) ) {
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
             my $c   = $self->config();
             $self->{cache}->set_in_cache(
