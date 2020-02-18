@@ -19,7 +19,7 @@ Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
 * Dans le fichier de configuration d'Apache, définissez l'alias `/plugins`. 
 * Activez la préférence système `UseKohaPlugins`. 
 
-**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](http://www.tamil.fr) l'archive de l'Extension **[Koha ⇄ Mir@bel](http://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.0.kpz)**.
+**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](http://www.tamil.fr) l'archive de l'Extension **[Koha ⇄ Mir@bel](http://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.1.kpz)**.
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à l'étape précédente. Cliquez sur Télécharger.
 
