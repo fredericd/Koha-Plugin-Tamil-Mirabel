@@ -19,11 +19,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2019-10-20",
+    date_updated    => "2020-02-18",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
-    copyright       => '2019',
-    version         => '1.0.0',
+    copyright       => '2020',
+    version         => '1.0.1',
 };
 
 
