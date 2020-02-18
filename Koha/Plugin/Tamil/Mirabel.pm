@@ -268,6 +268,7 @@ sub get_titres {
     my $titres = $self->{cache}->get_from_cache('titres');
     unless ($titres) {
         if ( $titres = $self->ws('/mes/titres', {possession=>1}) ) {
+            return [] if ref($titres) ne 'ARRAY';
             for my $titre (@$titres) {
                 my $id = $titre->{revueid};
                 $titre->{acces} = $self->ws('/acces/revue', {revueid => $id});
@@ -302,6 +303,7 @@ sub get_all_acces {
     my $acces = $self->{cache}->get_from_cache('acces');
     unless ($acces) {
         if ( $acces = $self->ws('/mes/acces', {possession => 1}) ) {
+            return [] if ref($acces) ne 'ARRAY';
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
             my %titre = map { $_->{titreid} => {} } @$acces;
             for my $id ( keys %titre ) {

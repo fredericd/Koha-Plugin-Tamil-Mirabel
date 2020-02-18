@@ -1,38 +1,42 @@
 [% INCLUDE "$PLUGIN_DIR/head.tt" %]
 
-  <h1>Mes titres</h1>
+<h1>Mes titres</h1>
+[% IF titres.size %] 
+ <p>
+   Ceci est la liste de mes titres gérés dans Mir@bel en tant que partenaire. 
+ </p>
+ [% FOREACH t IN titres %]
+  <h3>[% t.titre %]</h3>
   <p>
-    Ceci est la liste de mes titres gérés dans Mir@bel en tant que partenaire. 
+   [% t.editeurs.join(' &bullet; ') %] ;
+   [% t.periodicite %] ;
+   [% FOREACH i IN t.issns %]
+     [% i.issn %] ([% i.suport %])[% ", " UNLESS loop.last %]
+   [% END %]
+   ;
+   [% t.datedebut %] - [% t.datefin %]
   </p>
-  [% FOREACH t IN titres %]
-   <h3>[% t.titre %]</h3>
-   <p>
-    [% t.editeurs.join(' &bullet; ') %] ;
-    [% t.periodicite %] ;
-    [% FOREACH i IN t.issns %]
-      [% i.issn %] ([% i.suport %])[% ", " UNLESS loop.last %]
-    [% END %]
-    ;
-    [% t.datedebut %] - [% t.datefin %]
-   </p>
-   <p>
-    VOIR :
-    <a href="[% t.url %]">Éditeur</a>
-    |
-    <a href="https://reseau-mirabel.info/revue/[% t.revueid %]">Mirabel</a>
-    |
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% t.identifiantpartenaire %]">Koha</a>
-   </p>
-   <ul>
-    [% FOREACH a IN t.acces %]
-     <li>
-      <a href="[% a.url %]">[% a.ressource %]</a>,
-      [% a.numerodebut %]-[% a.numerofin %],
-      [% a.datedebut %]-[% a.datefin %],
-      [% a.contenu %] ([% a.diffusion %])
-     </li>
-    [% END %]
-   </ul>
-  [% END %]
+  <p>
+   VOIR :
+   <a href="[% t.url %]">Éditeur</a>
+   |
+   <a href="https://reseau-mirabel.info/revue/[% t.revueid %]">Mirabel</a>
+   |
+   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% t.identifiantpartenaire %]">Koha</a>
+  </p>
+  <ul>
+   [% FOREACH a IN t.acces %]
+    <li>
+     <a href="[% a.url %]">[% a.ressource %]</a>,
+     [% a.numerodebut %]-[% a.numerofin %],
+     [% a.datedebut %]-[% a.datefin %],
+     [% a.contenu %] ([% a.diffusion %])
+    </li>
+   [% END %]
+  </ul>
+ [% END %]
+[% ELSE %]
+ [% INCLUDE "$PLUGIN_DIR/invalidid.tt" %]
+[% END %]
 
 [% INCLUDE "$PLUGIN_DIR/foot.tt" %]
