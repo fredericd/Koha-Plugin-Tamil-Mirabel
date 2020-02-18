@@ -23,7 +23,7 @@ Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à l'étape précédente. Cliquez sur Télécharger.
 
-**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄ Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_ Mir@bel valide pour faire fonctionne l'extension.
+**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄ Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_ Mir@bel valide pour faire fonctionner l'extension.
 
 ## Utilisation de l'extension
 
