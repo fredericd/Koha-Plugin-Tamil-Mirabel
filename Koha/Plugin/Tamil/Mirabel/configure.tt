@@ -27,6 +27,10 @@
 
  <fieldset class="rows">
   <legend>Partenaire Mir@bel</legend>
+  <p>
+   Si les infos suivantes ne sont pas renseignées, l'accès à Mir@bel se
+   fera dans un mode non-partenaire.
+  </p>  
   <ol>
    <li>
     <label for="partenaire.id">ID Partenaire : </label>

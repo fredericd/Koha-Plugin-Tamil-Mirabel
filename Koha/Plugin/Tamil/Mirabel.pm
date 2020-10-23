@@ -19,11 +19,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2020-02-18",
+    date_updated    => "2020-10-23",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
     copyright       => '2020',
-    version         => '1.0.1',
+    version         => '1.0.2',
 };
 
 
@@ -32,7 +32,7 @@ my $DEFAULT_LISTE_TEMPLATE = <<EOS;
  <h4 class="alert-heading">Accès en ligne</h4>
  <p>
   Voici la liste des revues détenues à la Bibliothèque, pour lesquels un accès
-  en-ligne est disponible.
+  en ligne est disponible.
  </p>
 </div>
 <div>
@@ -251,8 +251,11 @@ sub ws() {
     if ( $param->{partenaire} && $param->{partenaire} eq 'delete' ) {
         delete $param->{partenaire};
     }
-    else {
+    elsif ($cle) {
         $param->{partenaire} = $cle;
+    }
+    else {
+        delete $param->{possession};
     }
     $url .= '?' . join('&', map { "$_=" . $param->{$_} } keys %$param)
       if keys %$param;

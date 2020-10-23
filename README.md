@@ -11,15 +11,17 @@ Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
 1. **Liste des revues** — Une URL de l'OPAC affiche la liste de toutes les revues du partenaire avec pour chaque revue ses points d'accès signalés dans Mir@bel.
 2. **Liste des accès** — Dans la page de détail d'une notice bibliographique d'un périodique tous ses accès sont affichés.
 
+Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le plugin. Seule la liste des accès sera affichée sur la page de détail.
+
 ## Installation
 
 **Activation des plugins** — Si ce n'est pas déjà fait, dans Koha, activez les plugins. Demandez à votre prestataire Koha de le faire, ou bien vérifiez les points suivants :
 
 * Dans `koha-conf.xml`, activez les plugins.
 * Dans le fichier de configuration d'Apache, définissez l'alias `/plugins`. 
-* Activez la préférence système `UseKohaPlugins`. 
+* Activez la préférence système `UseKohaPlugins` pour les Koha avant la version 20.05. 
 
-**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](http://www.tamil.fr) l'archive de l'Extension **[Koha ⇄ Mir@bel](http://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.1.kpz)**.
+**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr) l'archive de l'Extension **[Koha ⇄ Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.2.kpz)**.
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à l'étape précédente. Cliquez sur Télécharger.
 
@@ -225,10 +227,11 @@ L'extension Mir@bel envoie au template la variable `acces` qui contient un table
 ## VERSION
 
 * **1.0.0** / nov. 2019 — Version initiale
+* **1.0.2** / oct. 2020 — Mode non-partenaire
 
 ## LICENCE
 
-This software is copyright (c) 2019 by Tamil s.a.r.l..
+This software is copyright (c) 2020 by Tamil s.a.r.l..
 
 This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
 
