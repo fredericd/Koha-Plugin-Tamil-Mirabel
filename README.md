@@ -1,8 +1,8 @@
 # Extension Koha ⇄ Mir@bel
 
-**Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha en y intégrant les accès en- ligne aux revues repérées dans Mir@bel.
+**Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha en y intégrant les accès en ligne aux revues repérées dans Mir@bel.
 
-[Mir@bel](https://reseau-mirabel.info) est une **base de connaissances mutualisée des accès en-ligne aux revues en sciences humaines francophones**. Les conditions d'accès aux revues peuvent être libre, restreintes ou sous abonnement. Il y a des accès au texte intégral des revues, aux sommaires des numéros, à l'indexation des articles ou à leur résumé. La période de publication de la revue couverte par chaque accès, ainsi que les lacunes et les conditions d'accès sont également disponibles. Mir@bel est géré par un réseau de **partenaires**. Ce sont les bibliothèques et centres de documentation qui sont autorisés à mettre à jour Mir@bel et à récupérer localement les informations de Mir@bel au moyen de services web.
+[Mir@bel](https://reseau-mirabel.info) est une **base de connaissances mutualisée des accès en ligne aux revues en sciences humaines francophones**. Les conditions d'accès aux revues peuvent être libre, restreintes ou sous abonnement. Il y a des accès au texte intégral des revues, aux sommaires des numéros, à l'indexation des articles ou à leur résumé. La période de publication de la revue couverte par chaque accès, ainsi que les lacunes et les conditions d'accès sont également disponibles. Mir@bel est géré par un réseau de **partenaires**. Ce sont les bibliothèques et centres de documentation qui sont autorisés à mettre à jour Mir@bel et à récupérer localement les informations de Mir@bel au moyen de services web.
 
 L'extension Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans son OPAC Koha les informations de la base de connaissances Mir@bel. Ces échanges sont réalisés au moyens des [Service Web](https://reseau-mirabel.info/api) de Mir@bel.
 
@@ -25,13 +25,13 @@ Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le 
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à l'étape précédente. Cliquez sur Télécharger.
 
-**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄ Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_ Mir@bel valide pour faire fonctionner l'extension.
+**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄ Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_ Mir@bel valide pour activer les fonctionnalités avancée de l'extension.
 
 ## Utilisation de l'extension
 
 ### Liste des revues
 
-La liste des revues gérées dans Koha pour lesquelles des accès en-ligne sont proposés via Mir@bel est accessible à cette URL :
+La liste des revues gérées dans Koha pour lesquelles des accès en ligne sont proposés via Mir@bel est accessible à cette URL :
 
 ```
 <OPAC_KOHA>/cgi-bin/koha/opac-main.pl?mirabel=liste
@@ -40,7 +40,7 @@ La liste des revues gérées dans Koha pour lesquelles des accès en-ligne sont 
 Créez un lien vers cette URL sur la page d'Accueil de votre OPAC. Par exemple :
 
 ```html
-<a href="/cgi-bin/koha/opac-main.pl?mirabel=liste">Nos revues accessibles en-ligne</a>
+<a href="/cgi-bin/koha/opac-main.pl?mirabel=liste">Nos revues accessibles en ligne</a>
 ```
 
 Le formatage de la liste des revues est assuré par un template d'affichage. Un template est fourni par défaut, que vous pouvez modifier. Le système de traitement de template est le même que celui utilisé dans Koha : [Template Toolkit](http://www.template-toolkit.org).
@@ -166,7 +166,7 @@ Dans Koha, sur la page de détail d'une notice de périodique, les accès fourni
 
 * **Activer** pour activer/désactiver l'affichage.
 * **Emplacement** pour sélectionner l'emplacement où afficher les accès en-ligne :
-  * **Dans le pavé biblio** pour afficher les accès au-milieu de la notice, à un emplacement repéré par un identifiant html, par exemple : `.publisher`
+  * **Dans le pavé biblio** pour afficher les accès au milieu de la notice, à un emplacement repéré par un identifiant html, par exemple : `.publisher`
   * **Entre le pavé biblio et les exemplaires**
   * **Dans un nouvel onglet du pavé des exemplaires**
 * **Recherche par** pour spécifier la clé de recherche de la revue dans Mir@bel : l'ISSN, le biblionumber Koha ou le PPN Sudoc. Pour le moment, seul l'ISSN est pris en compte.
