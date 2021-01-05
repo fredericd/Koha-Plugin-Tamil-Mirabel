@@ -1,37 +1,64 @@
 # Extension Koha ⇄ Mir@bel
 
-**Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha en y intégrant les accès en ligne aux revues repérées dans Mir@bel.
+**Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha
+en y intégrant les accès en ligne aux revues repérées dans Mir@bel.
 
-[Mir@bel](https://reseau-mirabel.info) est une **base de connaissances mutualisée des accès en ligne aux revues en sciences humaines francophones**. Les conditions d'accès aux revues peuvent être libre, restreintes ou sous abonnement. Il y a des accès au texte intégral des revues, aux sommaires des numéros, à l'indexation des articles ou à leur résumé. La période de publication de la revue couverte par chaque accès, ainsi que les lacunes et les conditions d'accès sont également disponibles. Mir@bel est géré par un réseau de **partenaires**. Ce sont les bibliothèques et centres de documentation qui sont autorisés à mettre à jour Mir@bel et à récupérer localement les informations de Mir@bel au moyen de services web.
+[Mir@bel](https://reseau-mirabel.info) est une **base de connaissances
+mutualisée des accès en ligne aux revues en sciences humaines francophones**.
+Les conditions d'accès aux revues peuvent être libre, restreintes ou sous
+abonnement. Il y a des accès au texte intégral des revues, aux sommaires des
+numéros, à l'indexation des articles ou à leur résumé. La période de publication
+de la revue couverte par chaque accès, ainsi que les lacunes et les conditions
+d'accès sont également disponibles. Mir@bel est géré par un réseau de
+**partenaires**. Ce sont les bibliothèques et centres de documentation qui sont
+autorisés à mettre à jour Mir@bel et à récupérer localement les informations de
+Mir@bel au moyen de services web.
 
-L'extension Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans son OPAC Koha les informations de la base de connaissances Mir@bel. Ces échanges sont réalisés au moyens des [Service Web](https://reseau-mirabel.info/api) de Mir@bel.
+L'extension Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son
+Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans son OPAC Koha
+les informations de la base de connaissances Mir@bel. Ces échanges sont réalisés
+au moyens des [Service Web](https://reseau-mirabel.info/api) de Mir@bel.
 
 Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
 
-1. **Liste des revues** — Une URL de l'OPAC affiche la liste de toutes les revues du partenaire avec pour chaque revue ses points d'accès signalés dans Mir@bel.
-2. **Liste des accès** — Dans la page de détail d'une notice bibliographique d'un périodique tous ses accès sont affichés.
+1. **Liste des revues** — Une URL de l'OPAC affiche la liste de toutes les
+   revues du partenaire avec pour chaque revue ses points d'accès signalés dans
+   Mir@bel.
+2. **Liste des accès** — Dans la page de détail d'une notice bibliographique
+   d'un périodique tous ses accès sont affichés.
 
-Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le plugin. Seule la liste des accès sera affichée sur la page de détail.
+Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le
+plugin. Seule la liste des accès sera affichée sur la page de détail.
 
 ## Installation
 
-**Activation des plugins** — Si ce n'est pas déjà fait, dans Koha, activez les plugins. Demandez à votre prestataire Koha de le faire, ou bien vérifiez les points suivants :
+**Activation des plugins** — Si ce n'est pas déjà fait, dans Koha, activez les
+plugins. Demandez à votre prestataire Koha de le faire, ou bien vérifiez les
+points suivants :
 
 * Dans `koha-conf.xml`, activez les plugins.
 * Dans le fichier de configuration d'Apache, définissez l'alias `/plugins`. 
-* Activez la préférence système `UseKohaPlugins` pour les Koha avant la version 20.05. 
+* Activez la préférence système `UseKohaPlugins` pour les Koha avant la version
+  20.05. 
 
-**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr) l'archive de l'Extension **[Koha ⇄ Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.2.kpz)**.
+**▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
+l'archive de l'Extension **[Koha ⇄
+Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.3.kpz)**.
 
-**Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à l'étape précédente. Cliquez sur Télécharger.
+**Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de
+Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à
+l'étape précédente. Cliquez sur Télécharger.
 
-**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄ Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_ Mir@bel valide pour activer les fonctionnalités avancée de l'extension.
+**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄
+Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_
+Mir@bel valide pour activer les fonctionnalités avancée de l'extension.
 
 ## Utilisation de l'extension
 
 ### Liste des revues
 
-La liste des revues gérées dans Koha pour lesquelles des accès en ligne sont proposés via Mir@bel est accessible à cette URL :
+La liste des revues gérées dans Koha pour lesquelles des accès en ligne sont
+proposés via Mir@bel est accessible à cette URL :
 
 ```
 <OPAC_KOHA>/cgi-bin/koha/opac-main.pl?mirabel=liste
@@ -43,9 +70,14 @@ Créez un lien vers cette URL sur la page d'Accueil de votre OPAC. Par exemple :
 <a href="/cgi-bin/koha/opac-main.pl?mirabel=liste">Nos revues accessibles en ligne</a>
 ```
 
-Le formatage de la liste des revues est assuré par un template d'affichage. Un template est fourni par défaut, que vous pouvez modifier. Le système de traitement de template est le même que celui utilisé dans Koha : [Template Toolkit](http://www.template-toolkit.org).
+Le formatage de la liste des revues est assuré par un template d'affichage. Un
+template est fourni par défaut, que vous pouvez modifier. Le système de
+traitement de template est le même que celui utilisé dans Koha : [Template
+Toolkit](http://www.template-toolkit.org).
 
-L'extension Mir@el envoie au template une variable appelée `titres` qui est un tableau de titres de revues, avec pour chacune un tableau de ses accès. Par exemple :
+L'extension Mir@el envoie au template une variable appelée `titres` qui est un
+tableau de titres de revues, avec pour chacune un tableau de ses accès. Par
+exemple :
 
 ```json
 [ 
@@ -162,17 +194,24 @@ L'extension Mir@el envoie au template une variable appelée `titres` qui est un 
 
 ### Liste des accès
 
-Dans Koha, sur la page de détail d'une notice de périodique, les accès fournis par Mir@bel peuvent être affichés. Cette affichage est pilotée par la section _Affichage avec les notices à l'OPAC_ de la configuration :
+Dans Koha, sur la page de détail d'une notice de périodique, les accès fournis
+par Mir@bel peuvent être affichés. Cette affichage est pilotée par la section
+_Affichage avec les notices à l'OPAC_ de la configuration :
 
 * **Activer** pour activer/désactiver l'affichage.
 * **Emplacement** pour sélectionner l'emplacement où afficher les accès en-ligne :
-  * **Dans le pavé biblio** pour afficher les accès au milieu de la notice, à un emplacement repéré par un identifiant html, par exemple : `.publisher`
+  * **Dans le pavé biblio** pour afficher les accès au milieu de la notice, à un
+    emplacement repéré par un identifiant html, par exemple : `.publisher`
   * **Entre le pavé biblio et les exemplaires**
   * **Dans un nouvel onglet du pavé des exemplaires**
-* **Recherche par** pour spécifier la clé de recherche de la revue dans Mir@bel : l'ISSN, le biblionumber Koha ou le PPN Sudoc. Pour le moment, seul l'ISSN est pris en compte.
-* **Template** — L'affichage est déterminé par un _template_ fourni par défaut. Vous pouvez le modifier.
+* **Recherche par** pour spécifier la clé de recherche de la revue dans Mir@bel
+  : l'ISSN, le biblionumber Koha ou le PPN Sudoc. Pour le moment, seul l'ISSN
+  est pris en compte.
+* **Template** — L'affichage est déterminé par un _template_ fourni par défaut.
+  Vous pouvez le modifier.
 
-L'extension Mir@bel envoie au template la variable `acces` qui contient un tableau des accès à la revue. Par exemple :
+L'extension Mir@bel envoie au template la variable `acces` qui contient un
+tableau des accès à la revue. Par exemple :
 
 ```json
 [ 
@@ -224,14 +263,17 @@ L'extension Mir@bel envoie au template la variable `acces` qui contient un table
 ]
 ```
 
-## VERSION
+## VERSIONS
 
 * **1.0.0** / nov. 2019 — Version initiale
 * **1.0.2** / oct. 2020 — Mode non-partenaire
+* **1.0.3** / jan. 2021 — Bug d'affichage pour les partenaires sur les revues
+  qu'ils ne possèdent pas
 
 ## LICENCE
 
-This software is copyright (c) 2020 by Tamil s.a.r.l..
+This software is copyright (c) 2021 by Tamil s.a.r.l..
 
-This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.
+This is free software; you can redistribute it and/or modify it under the same
+terms as the Perl 5 programming language system itself.
 

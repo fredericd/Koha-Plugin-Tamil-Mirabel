@@ -19,11 +19,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2020-10-23",
+    date_updated    => "2021-01-05",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
-    copyright       => '2020',
-    version         => '1.0.2',
+    copyright       => '2021',
+    version         => '1.0.3',
 };
 
 
@@ -331,10 +331,15 @@ sub get_acces {
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
         if ( $acces = $self->ws('/acces/titres', {issn => $id, possession => 1}) ) {
-            $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
-            my $c   = $self->config();
-            $self->{cache}->set_in_cache(
-                $key, $acces, { expiry => $c->{url}->{timeout} })
+             if (ref($acces) eq 'HASH' && $acces->{code} eq '404') {
+                 $acces = [];
+             }
+             else {
+                 $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
+             }
+             my $c   = $self->config();
+             $self->{cache}->set_in_cache(
+                 $key, $acces, { expiry => $c->{url}->{timeout} })
         }
     }
     return $acces;
@@ -344,15 +349,16 @@ sub get_acces {
 sub html_acces {
     my ($self, $id) = @_;
 
-    if ( my $acces = $self->get_acces($id) ) {
-        my $c = $self->config();
-        my $template = Template->new();
-        my $text = $c->{opac}->{biblio}->{template};
-        my $html = '';
-        $template->process(\$text, { acces => $acces }, \$html)
-            or die "Mauvais template biblio : " . $template->error();
-        return $html;
-    }     
+    my $acces = $self->get_acces($id);
+    return "" unless @$acces;
+
+    my $c = $self->config();
+    my $template = Template->new();
+    my $text = $c->{opac}->{biblio}->{template};
+    my $html = '';
+    $template->process(\$text, { acces => $acces }, \$html)
+        or die "Mauvais template biblio : " . $template->error();
+    return $html;
 }
 
 
@@ -433,6 +439,8 @@ sub opac_detail {
     return unless $issn;
 
     my $acces = $self->html_acces($issn);
+    return "" unless $acces;
+
     $acces = encode_json($acces);
     utf8::decode($acces);
     my $biblio = $c->{opac}->{biblio};
