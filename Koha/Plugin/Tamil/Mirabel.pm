@@ -23,7 +23,7 @@ our $metadata = {
     minimum_version => '18.11.00.000',
     maximum_version => undef,
     copyright       => '2021',
-    version         => '1.0.3',
+    version         => '1.0.4',
 };
 
 
@@ -254,9 +254,6 @@ sub ws() {
     elsif ($cle) {
         $param->{partenaire} = $cle;
     }
-    else {
-        delete $param->{possession};
-    }
     $url .= '?' . join('&', map { "$_=" . $param->{$_} } keys %$param)
       if keys %$param;
 
@@ -330,7 +327,7 @@ sub get_acces {
     my $key = "acces_$id";
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
-        if ( $acces = $self->ws('/acces/titres', {issn => $id, possession => 1}) ) {
+        if ( $acces = $self->ws('/acces/titres', {issn => $id}) ) {
              if (ref($acces) eq 'HASH' && $acces->{code} eq '404') {
                  $acces = [];
              }
