@@ -23,7 +23,7 @@ our $metadata = {
     minimum_version => '18.11.00.000',
     maximum_version => undef,
     copyright       => '2021',
-    version         => '1.0.4',
+    version         => '1.0.5',
 };
 
 
@@ -54,7 +54,7 @@ my $DEFAULT_LISTE_TEMPLATE = <<EOS;
   ; [% t.periodicite %]
   ;
   [% FOREACH i IN t.issns %]
-   [% i.issn %] ([% i.suport %])[% ", " UNLESS loop.last %]
+   [% i.issn %] ([% i.support %])[% ", " UNLESS loop.last %]
   [% END %]
    ;
   [% t.datedebut %] - [% t.datefin %]
@@ -62,7 +62,7 @@ my $DEFAULT_LISTE_TEMPLATE = <<EOS;
  <ul>
   [% FOREACH a IN t.acces %]
    <li>
-    <a href="[% a.url %]">[% a.ressource %]</a>,
+    <a href="[% a.urlproxy || a.url %]">[% a.ressource %]</a>,
     [% a.numerodebut %]-[% a.numerofin %],
     [% a.datedebut %]-[% a.datefin %],
     [% a.contenu %] ([% a.diffusion %])
@@ -81,7 +81,7 @@ my $DEFAULT_BIBLIO_TEMPLATE = <<EOS;
     <th>
      <a href="https://reseau-mirabel.info">
       <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Mir\@bel"/>
-     </a> Accès en-ligne
+     </a> Accès en ligne
     </th>
     <th>Ressource</th>
     <th>Accès</th>
@@ -90,7 +90,7 @@ my $DEFAULT_BIBLIO_TEMPLATE = <<EOS;
    <tbody>
     [% FOREACH a IN acces %]
      <tr>
-      <td><a href="[% a.url %]">[% a.contenu %]</a></td>
+      <td><a href="[% a.urlproxy || a.url %]">[% a.contenu %]</a></td>
       <td><a href="https://reseau-mirabel.info/ressource/[% a.ressourceid %]">[% a.ressource %]</td>
       <td>[% a.diffusion %]</td>
       <td>

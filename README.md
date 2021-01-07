@@ -43,7 +43,7 @@ points suivants :
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
 l'archive de l'Extension **[Koha ⇄
-Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.4.kpz)**.
+Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.5.kpz)**.
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de
 Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à
@@ -267,7 +267,7 @@ tableau des accès à la revue. Par exemple :
 
 * **1.0.0** / nov. 2019 — Version initiale
 * **1.0.2** / oct. 2020 — Mode non-partenaire
-* **1.0.4** / jan. 2021 — Bug d'affichage pour les partenaires sur les revues
+* **1.0.5** / jan. 2021 — Bug d'affichage pour les partenaires sur les revues
   qu'ils ne possèdent pas
 
 ## LICENCE
