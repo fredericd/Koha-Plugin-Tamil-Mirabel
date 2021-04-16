@@ -19,11 +19,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2021-01-05",
+    date_updated    => "2021-04-16",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
     copyright       => '2021',
-    version         => '1.0.5',
+    version         => '1.0.6',
 };
 
 
@@ -328,7 +328,7 @@ sub get_acces {
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
         if ( $acces = $self->ws('/acces/titres', {issn => $id}) ) {
-             if (ref($acces) eq 'HASH' && $acces->{code} eq '404') {
+             if (ref($acces) eq 'HASH' && $acces->{code}) {
                  $acces = [];
              }
              else {
