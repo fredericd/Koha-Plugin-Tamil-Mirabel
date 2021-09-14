@@ -19,11 +19,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2021-04-16",
+    date_updated    => "2021-09-14",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
     copyright       => '2021',
-    version         => '1.0.6',
+    version         => '1.0.7',
 };
 
 
@@ -480,10 +480,13 @@ sub opac_liste {
     $titres = encode_json($titres);
     utf8::decode($titres);
 
+    my $more_than_2011 = C4::Context->preference('Version') ge '20.11' ? 1 : 0;
+    my $div_id = $more_than_2011 ? "'.maincontent'" : "'.main .span7'";
+
     return <<EOS;
 <script>
 \$(document).ready(function(){
-  var id = \$('.main .span7').hide();
+  var id = \$($div_id).hide();
   id.html($titres);
   id.show();
   \$('.breadcrumb a').attr('href', '/');

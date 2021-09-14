@@ -43,7 +43,7 @@ points suivants :
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
 l'archive de l'Extension **[Koha ⇄
-Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.6.kpz)**.
+Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-1.0.7.kpz)**.
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de
 Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à
