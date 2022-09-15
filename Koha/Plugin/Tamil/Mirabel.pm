@@ -16,14 +16,15 @@ use Template;
 ## Here is our metadata, some keys are required, some are optional
 our $metadata = {
     name            => 'Koha ⇄ Mir@bel',
+    canonicalname   => 'koha-plugin-tamil-mirabel',
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2021-09-14",
+    date_updated    => "2022-09-14",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
-    copyright       => '2021',
-    version         => '1.0.7',
+    copyright       => '2022',
+    version         => '1.0.8',
 };
 
 
@@ -144,6 +145,8 @@ sub config {
     $c->{url}->{timeout} ||= 600;
     $c->{opac}->{liste}->{template} ||= $DEFAULT_LISTE_TEMPLATE;
     $c->{opac}->{biblio}->{template} ||= $DEFAULT_BIBLIO_TEMPLATE;
+    $c->{opac}->{biblio}->{affiche}->{id} ||= 'id_div_mirabel';
+    $c->{opac}->{biblio}->{affiche}->{iitemlabel} ||= 'Mir@bel';
     $c->{metadata} = $self->{metadata};
 
     $self->{args}->{c} = $c;
@@ -173,6 +176,7 @@ sub get_form_config {
                 affiche => {
                     ou => undef,
                     id => undef,
+                    itemlabel => undef,
                 },
                 cherche => undef,
                 template => undef,
@@ -191,7 +195,9 @@ sub get_form_config {
                 $set->($subnode, $key);
             }
             else {
-                $node->{$subkey} = $cgi->param($key);
+                my $value = $cgi->param("$key");
+                $value = '' unless defined($value);
+                $node->{$subkey} = $value;
             }
         }
     };
@@ -444,6 +450,7 @@ sub opac_detail {
     my $location = $biblio->{affiche}->{ou};
     my $id       = $location eq 'div' ? $biblio->{affiche}->{id} :
                    $location eq 'ex_dessus' ? '#catalogue_detail_biblio' : 0;
+    my $itemlabel = $biblio->{affiche}->{itemlabel};
 
     return <<EOS;
 <script>
@@ -452,7 +459,7 @@ sub opac_detail {
       if (location !== '0') {
         \$(location).append(html);
       } else {
-        var tabMenu = "<li class='ui-state-default ui-corner-top' role='tab' tabindex='-1' aria-controls='mirabel' aria-labelledby='ui-id-7' aria-selected='false'><a href='#mirabel' class='ui-tabs-anchor' role='presentation' tabindex='-1' id='ui-id-7'>Mir\@bel</a></li>";
+        var tabMenu = "<li class='ui-state-default ui-corner-top' role='tab' tabindex='-1' aria-controls='mirabel' aria-labelledby='ui-id-7' aria-selected='false'><a href='#mirabel' class='ui-tabs-anchor' role='presentation' tabindex='-1' id='ui-id-7'>${itemlabel}</a></li>";
         var tabs = \$('#bibliodescriptions').tabs();
         var ul = tabs.find("ul");
         \$(ul).append(tabMenu);
