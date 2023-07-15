@@ -20,11 +20,11 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2022-09-14",
+    date_updated    => "2023-07-17",
     minimum_version => '18.11.00.000',
     maximum_version => undef,
-    copyright       => '2022',
-    version         => '1.0.8',
+    copyright       => '2023',
+    version         => '1.0.9',
 };
 
 
@@ -120,6 +120,7 @@ sub new {
     $args->{metadata} = $metadata;
     $args->{metadata}->{class} = $class;
     $args->{cache} = Koha::Cache->new();
+    $args->{logger} = Koha::Logger->get({ interface => 'api' });
 
     $class->SUPER::new($args);
 }
@@ -273,16 +274,24 @@ sub get_titres {
 
     my $titres = $self->{cache}->get_from_cache('titres');
     unless ($titres) {
-        if ( $titres = $self->ws('/mes/titres', {possession=>1}) ) {
-            return [] if ref($titres) ne 'ARRAY';
-            for my $titre (@$titres) {
-                my $id = $titre->{revueid};
-                $titre->{acces} = $self->ws('/acces/revue', {revueid => $id});
+        my $offset = 0;
+        $titres = [];
+        while (1) {
+            my $batch_titres = $self->ws('/mes/titres', {possession=>1, offset=>$offset});
+            if (ref($batch_titres) eq 'ARRAY' && @$batch_titres > 0) {
+                for my $titre (@$batch_titres) {
+                    my $id = $titre->{revueid};
+                    $titre->{acces} = $self->ws('/acces/revue', {revueid => $id});
+                    push @$titres, $titre;
+                }
+                $offset += 1000;
+                next;
             }
-            my $c = $self->config();
-            $self->{cache}->set_in_cache(
-                'titres', $titres, { expiry => $c->{url}->{timeout} });
+            last;
         }
+        my $c = $self->config();
+        $self->{cache}->set_in_cache(
+            'titres', $titres, { expiry => $c->{url}->{timeout} });
     }
     return $titres;
 }
