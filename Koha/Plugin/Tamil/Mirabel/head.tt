@@ -22,8 +22,7 @@
      </a>
      <ul>
       <li><a href="?class=[% CLASS %]&method=tool">Accueil </a></li>
-      <li><a href="?class=[% CLASS %]&method=tool&tool=acces">Mes accès</a></li>
-      <li><a href="?class=[% CLASS %]&method=tool&tool=titres">Mes titres</a></li>
+      <li><a href="?class=[% CLASS %]&method=tool&tool=revues">Mes revues</a></li>
       <li><a href="?class=[% CLASS %]&method=configure">Configuration </a></li>
      </ul>
     </ul>

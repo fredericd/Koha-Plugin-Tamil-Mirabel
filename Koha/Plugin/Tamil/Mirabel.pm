@@ -4,12 +4,12 @@ use Modern::Perl;
 use utf8;
 use base qw(Koha::Plugins::Base);
 use CGI qw(-utf8);
-use C4::Context;
-use C4::Biblio;
 use Koha::Cache;
 use Mojo::UserAgent;
 use Mojo::JSON qw(decode_json encode_json);
 use Template;
+use List::Util qw/ first /;
+use YAML;
 
 
 
@@ -20,15 +20,15 @@ our $metadata = {
     description     => 'Interfaçage entre Koha et Mir@bel',
     author          => 'Tamil s.a.r.l.',
     date_authored   => '2019-10-20',
-    date_updated    => "2023-07-17",
-    minimum_version => '18.11.00.000',
+    date_updated    => "2024-07-01",
+    minimum_version => '22.11.00.000',
     maximum_version => undef,
-    copyright       => '2023',
-    version         => '1.0.9',
+    copyright       => '2024',
+    version         => '2.0.0',
 };
 
 
-my $DEFAULT_LISTE_TEMPLATE = <<EOS;
+my $DEFAULT_TEMPLATE_REVUES = <<EOS;
 <div class="alert alert-success" role="alert">
  <h4 class="alert-heading">Accès en ligne</h4>
  <p>
@@ -37,78 +37,135 @@ my $DEFAULT_LISTE_TEMPLATE = <<EOS;
  </p>
 </div>
 <div>
-[% FOREACH t IN titres %]
+[% FOREACH titres IN revues %]
+ [% premier = titres.0 %]
  <h3>
-  [% t.titre %]
-  <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% t.identifiantpartenaire %]">
-   <img src="/opac-tmpl/bootstrap/images/favicon.ico" title="Voir cette revue dans ce Catalogue"/>
-  </a>
-  <a href="https://reseau-mirabel.info/revue/[% t.revueid + %]" target="_blank">
+  [% premier.titre %]
+  <a href="https://reseau-mirabel.info/revue/[% premier.revueid %]" target="_blank">
    <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Dans Mir\@bel"/>
   </a>
-  <a href="[% t.url %]" target="_blank" title="Chez son éditeur">
-   <span style="background-color: #a0a0a0; padding: 2px;  color:white; font-size:11px;">É</span>
-  </a>
  </h3>
- <p>
-  [% t.editeurs.join(' • ') %]
-  ; [% t.periodicite %]
-  ;
-  [% FOREACH i IN t.issns %]
-   [% i.issn %] ([% i.support %])[% ", " UNLESS loop.last %]
-  [% END %]
-   ;
-  [% t.datedebut %] - [% t.datefin %]
- </p>
  <ul>
-  [% FOREACH a IN t.acces %]
+  [% FOREACH titre IN titres %]
+   [% biblionumber = titre.acces.0.identifiantpartenaire %]
    <li>
-    <a href="[% a.urlproxy || a.url %]">[% a.ressource %]</a>,
-    [% a.numerodebut %]-[% a.numerofin %],
-    [% a.datedebut %]-[% a.datefin %],
-    [% a.contenu %] ([% a.diffusion %])
+    [% IF biblionumber %]
+     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" title="Voir dans le catalogue" target="_blanck">
+      [% titre.prefixe %][% titre.titre %]
+     </a>
+    [% ELSE %]
+     [% titre.prefixe %][% titre.titre %]
+    [% END %]
+    [% IF titre.url %]
+     <a href="[% titre.url %]" target="_blank" title="Chez son éditeur">
+      <span style="background-color: #a0a0a0; padding: 2px;  color:white; font-size:11px;">É</span>
+     </a>
+    [% END %]
+    :
+    [% titre.datedebut %]-[% titre.datefin %],
+    [% IF titre.periodicite %][% titre.periodicite %], [% END %]
+    [% FOREACH editeur IN titre.editeurs %]
+     [% editeur %][% IF ! loop.last %], [% END %]
+    [% END %]
+    [% IF titre.acces %]
+     <ul>
+      [% FOREACH a IN titre.acces %]
+       <li>
+        <a href="[% a.urlproxy || a.url %]">[% a.ressource %]</a>,
+        [% a.contenu %], [% a.diffusion %],
+        [% IF a.datedebut %]
+         [% a.datedebut %]
+         [%IF a.numerodebut %]([% a.numerodebut %])[% END %]
+        [% END %]
+        [% IF a.datefin %]
+         -
+         [% a.datefin %]
+         [%IF a.numerofin %]([% a.numerofin %])[% END %]
+        [% END %]
+        [% IF a.lacunaire %][lacunaire][% END %]
+       </li>
+      [% END %]
+     </ul>
+    [% END %]
    </li>
   [% END %]
  </ul>
 [% END %]
-</div>
 EOS
 
-my $DEFAULT_BIBLIO_TEMPLATE = <<EOS;
-<div id="mirabel" aria-labelledby="ui-id-7" class="ui-tabs-panel ui-widget-content ui-corner-bottom" role="tabpanel" aria-expanded="false" aria-hidden="true" style="display:block; border: 1px solid #c0c0c0; padding: 7px; margin-bottom:0px; margin-top: 5px;">
+my $DEFAULT_TEMPLATE_ACCES = <<EOS;
+<style>
+#mirabel ul li {
+  list-style-type: disc;
+}
+</style>
+<div id="mirabel" aria-labelledby="ui-id-7"
+  class="ui-tabs-panel ui-corner-bottom"
+  role="tabpanel" aria-expanded="false" aria-hidden="true"
+  style="display:block; background: white; border: 1px solid #c0c0c0; padding: 7px; margin-bottom:0px; margin-top: 5px;"
+>
  <div class="content_set">
-  <table class="table table-sm table-condensed table-hover" style="margin-bottom: 0px;">
-   <thead class="thead-dark">
-    <th>
-     <a href="https://reseau-mirabel.info">
-      <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Mir\@bel"/>
-     </a> Accès en ligne
-    </th>
-    <th>Ressource</th>
-    <th>Accès</th>
-    <th>Numéros</th>
-   </thead>
-   <tbody>
+  <p>
+   <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Mir\@bel"/>
+   Accès en ligne à la revue via
+   <a href="https://reseau-mirabel.info/revue/titre-id/[% acces.0.titreid %]">Mir\@bel</a>
+  </p>
+  [% IF conf.mode == 'tableau' %]
+   <table class="table table-sm table-condensed table-hover" style="margin-bottom: 0px;">
+    <thead class="thead-dark">
+     <th>Accès</th>
+     <th>Ressource</th>
+     <th>Modalité</th>
+     <th>Numéros</th>
+    </thead>
+    <tbody>
+     [% FOREACH a IN acces %]
+      <tr>
+       <td><a href="[% a.urlproxy || a.url %]">[% a.contenu %]</a></td>
+       <td>[% a.ressource %]</td>
+       <td>[% a.diffusion %]</td>
+       <td>
+        [% a.datedebut %]
+        [% IF a.numerodebut %]([% a.numerodebut %])[% END %]
+        —
+        [% IF a.datefin != "" %]
+          [% a.datefin %]
+          [% IF a.numerofin %]([% a.numerofin %])[% END %]
+        [% ELSE %]
+          ...
+        [% END %]
+        [% IF a.lacunaire %] [lacunaire][% END %]
+        [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
+       </td>
+      <tr>
+     [% END %]
+    </tbody>
+   </table>
+  [% ELSE %]
+   <ul>
     [% FOREACH a IN acces %]
-     <tr>
-      <td><a href="[% a.urlproxy || a.url %]">[% a.contenu %]</a></td>
-      <td><a href="https://reseau-mirabel.info/ressource/[% a.ressourceid %]">[% a.ressource %]</td>
-      <td>[% a.diffusion %]</td>
-      <td>
+     <li>
+      <a href="[% a.urlproxy || a.url %]">
        [% a.datedebut %]
        [% IF a.numerodebut %]([% a.numerodebut %])[% END %]
        —
        [% IF a.datefin != "" %]
-         [% a.datefin %]
-         [% IF a.numerofin %]([% a.numerofin %])[% END %]
+        [% a.datefin %]
+        [% IF a.numerofin %]([% a.numerofin %])[% END %]
        [% ELSE %]
-         ...
+        ...
        [% END %]
-      <td>
-     <tr>
+      </a>
+      [% IF a.lacunaire %] [lacunaire][% END %]
+      [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
+      /
+      [% a.ressource %]
+      [% UNLESS conf.cacher.search('contenu') %]; [% a.contenu %][% END %]
+      [% UNLESS conf.cacher.search('diffusion') %]; [% a.diffusion %][% END %]
+     </li>
     [% END %]
-   </tbody>
-  </table>
+   </ul>
+  [% END %]
  </div>
 </div>
 EOS
@@ -144,10 +201,8 @@ sub config {
     $c->{url}->{web} ||= 'https://reseau-mirabel.info';
     $c->{url}->{api} ||= 'https://reseau-mirabel.info/api';
     $c->{url}->{timeout} ||= 600;
-    $c->{opac}->{liste}->{template} ||= $DEFAULT_LISTE_TEMPLATE;
-    $c->{opac}->{biblio}->{template} ||= $DEFAULT_BIBLIO_TEMPLATE;
-    $c->{opac}->{biblio}->{affiche}->{id} ||= 'id_div_mirabel';
-    $c->{opac}->{biblio}->{affiche}->{iitemlabel} ||= 'Mir@bel';
+    $c->{template}->{revues} ||= $DEFAULT_TEMPLATE_REVUES;
+    $c->{template}->{acces} ||= $DEFAULT_TEMPLATE_ACCES;
     $c->{metadata} = $self->{metadata};
 
     $self->{args}->{c} = $c;
@@ -168,21 +223,48 @@ sub get_form_config {
             id  => undef,
             cle => undef,
         },
-        opac => {
-            liste => {
-                template => undef,
-            },
-            biblio => {
-                active => undef,
-                affiche => {
-                    ou => undef,
-                    id => undef,
-                    itemlabel => undef,
+        template => {
+            revues => undef,
+            acces => undef,
+        },
+        acces => {
+            opac => {
+                detail => {
+                    active => undef,
+                    mode => undef,
+                    revue => undef,
+                    exclure => undef,
+                    date => undef,
+                    cacher => undef,
                 },
-                cherche => undef,
-                template => undef,
-            }
-        }
+                result => {
+                    active => undef,
+                    mode => undef,
+                    revue => undef,
+                    exclure => undef,
+                    date => undef,
+                    cacher => undef,
+                },
+            },
+            pro => {
+                detail => {
+                    active => undef,
+                    mode => undef,
+                    revue => undef,
+                    exclure => undef,
+                    date => undef,
+                    cacher => undef,
+                },
+                result => {
+                    active => undef,
+                    mode => undef,
+                    revue => undef,
+                    exclure => undef,
+                    date => undef,
+                    cacher => undef,
+                },
+            },
+        },
     };
 
     my $set;
@@ -196,9 +278,11 @@ sub get_form_config {
                 $set->($subnode, $key);
             }
             else {
-                my $value = $cgi->param("$key");
-                $value = '' unless defined($value);
-                $node->{$subkey} = $value;
+                #my $value = $cgi->param("$key");
+                #$value = '' unless defined($value);
+                #$node->{$subkey} = $value;
+                my @values = $cgi->multi_param("$key");
+                $node->{$subkey} = join(',', @values);
             }
         }
     };
@@ -269,107 +353,165 @@ sub ws() {
 }
 
 
-sub get_titres {
+sub html_revues {
     my $self = shift;
 
-    my $titres = $self->{cache}->get_from_cache('titres');
-    unless ($titres) {
-        my $offset = 0;
-        $titres = [];
-        while (1) {
-            my $batch_titres = $self->ws('/mes/titres', {possession=>1, offset=>$offset});
-            if (ref($batch_titres) eq 'ARRAY' && @$batch_titres > 0) {
-                for my $titre (@$batch_titres) {
-                    my $id = $titre->{revueid};
-                    $titre->{acces} = $self->ws('/acces/revue', {revueid => $id});
-                    push @$titres, $titre;
-                }
-                $offset += 1000;
-                next;
-            }
-            last;
-        }
-        my $c = $self->config();
-        $self->{cache}->set_in_cache(
-            'titres', $titres, { expiry => $c->{url}->{timeout} });
-    }
-    return $titres;
-}
-
-
-sub html_titres {
-    my $self = shift;
-
-    if ( my $titres = $self->get_titres() ) {
+    if ( my $revues = $self->get_revues() ) {
         my $c = $self->config();
         my $template = Template->new();
-        my $text = $c->{opac}->{liste}->{template};
+        my $text = $c->{template}->{revues};
         my $html = '';
-        $template->process(\$text, { titres => $titres }, \$html)
-            or die "Mauvais template liste : " . $template->error();
+        $template->process(\$text, { revues => $revues }, \$html)
+            or $html = "Mauvais template revues : " . $template->error();
         return $html;
-    }     
+    }
 }
 
 
-sub get_all_acces {
+sub get_revues {
     my $self = shift;
 
-    my $acces = $self->{cache}->get_from_cache('acces');
-    unless ($acces) {
-        if ( $acces = $self->ws('/mes/acces', {possession => 1}) ) {
+    my $revues = $self->{cache}->get_from_cache('revues');
+    unless ($revues) {
+        if ( my $acces = $self->ws('/mes/acces', { possession => 1, abonnement => 0 }) ) {
             return [] if ref($acces) ne 'ARRAY';
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
-            my %titre = map { $_->{titreid} => {} } @$acces;
-            for my $id ( keys %titre ) {
-                $titre{$id} = $self->ws("/titres/$id", {partenaire => 'delete'});
+            my %titre = map { $_->{titreid} => undef } @$acces;
+            my @ids = sort { $a <=> $b } keys %titre;
+            my $OFFSET = 500;
+            while (@ids) {
+                my @search_ids = splice(@ids, 0, $OFFSET);
+                my $titres = $self->ws("/titres?id=" . join(',', @search_ids), {partenaire => 'delete'});
+                $titre{$_->{id}} = $_  for @$titres;
             }
-            for (@$acces) {
-                $_->{titre} = $titre{ $_->{titreid} };
+            for my $a (@$acces) {
+                my $titreid = $a->{titreid};
+                my $revueid = $titre{$titreid}->{revueid};
+                $revues->{$revueid} ||= [];
+                my $titres = $revues->{$revueid};
+                my $titre = first { $_->{id} == $titreid } @$titres;
+                unless ($titre) {
+                    $titre = $titre{$titreid};
+                    $titre->{acces} = [];
+                    push @$titres, $titre;
+                }
+                my $clone = {};
+                for my $name (keys %$a) {
+                    $clone->{$name} = $a->{$name};
+                }
+                push @{$titre->{acces}}, $clone;
             }
+            # On réordonne les titres de chaque revue par date de début inverse
+            while (my ($revueid, $titres) = each %$revues) {
+                next if @$titres == 1;
+                $revues->{$revueid} = [ sort {
+                    ($b->{datedebut} || 0) cmp ($a->{datedebut} || 0)
+                } @$titres ];
+            }
+            # On trie par 1er titre
+            $revues = [ sort {
+                $a->[0]->{titre} cmp $b->[0]->{titre}
+            } values %$revues ];
+
             my $c = $self->config();
             $self->{cache}->set_in_cache(
-                'acces', $acces, { expiry => $c->{url}->{timeout} });
+                'revues', $revues, { expiry => $c->{url}->{timeout} });
         }
     }
+    return $revues;
+}
+
+
+sub acces_filter {
+    my ($self, $acces, $date, $conf) = @_;
+
+    my $logger = $self->{logger};
+
+    # Exclure certains accès identifiés par contenu/diffusion
+    if (my @exclure = split /,/, $conf->{exclure}) {
+        my %exclure;
+        for my $contenu (@exclure) {
+            if ($contenu =~ /^(.*)-(.*)$/) {
+                $exclure{$1}->{$2} = 1;
+            }
+            else {
+                $exclure{$contenu} = 1;
+            }
+        }
+        $acces = [ grep {
+            my $keep = 1;
+            if (my $found = $exclure{$_->{contenu}}) {
+                if (ref($found) eq 'HASH') {
+                    $keep = 0 if $found->{$_->{diffusion}};
+                }
+                else {
+                    $keep = 0;
+                }
+            }
+            $keep;
+        } @$acces ];
+    }
+
+    # Exclure les accès qui ne correspondent pas à la date donnée
+    if ($conf->{date} && $date && $date =~ /^[0-9]{4}$/) {
+        $logger->debug("Filtrage des accès par date: $date");
+        $acces = [ grep {
+            my $keep = 1;
+            my $debut = $_->{datedebut};
+            $debut = $1 if $debut =~ /^([0-9]{4})/;
+            my $fin = $_->{datefin};
+            $fin = $1 if $fin =~ /^([0-9]{4})/;
+            $keep = 0 if $debut && $date < $debut;
+            $keep = 0 if $fin && $date > $ fin;
+            $logger->debug("debut: $debut - fin: $fin - keep: $keep");
+            $keep;
+        } @$acces ];
+    }
+    
+    # Tri
+    $acces = [ sort {
+        ($a->{datedebut} . $a->{contenu} . $a->{ressource})
+          cmp
+        ($b->{datedebut} . $b->{contenu} . $b->{ressource})
+    } @$acces ];
+
     return $acces;
 }
 
 
 sub get_acces {
-    my ($self, $id) = @_;
+    my ($self, $id, $date, $conf) = @_;
 
     my $key = "acces_$id";
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
-        if ( $acces = $self->ws('/acces/titres', {issn => $id}) ) {
+        my $url = $conf->{revue} ? '/acces/revue' : '/acces/titres';
+        if ( $acces = $self->ws($url, { issn => $id }) ) {
              if (ref($acces) eq 'HASH' && $acces->{code}) {
                  $acces = [];
-             }
-             else {
-                 $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
              }
              my $c   = $self->config();
              $self->{cache}->set_in_cache(
                  $key, $acces, { expiry => $c->{url}->{timeout} })
         }
     }
-    return $acces;
+
+    return $self->acces_filter($acces, $date, $conf);
 }
 
 
 sub html_acces {
-    my ($self, $id) = @_;
+    my ($self, $id, $date, $conf) = @_;
 
-    my $acces = $self->get_acces($id);
+    my $acces = $self->get_acces($id, $date, $conf);
     return "" unless @$acces;
 
     my $c = $self->config();
     my $template = Template->new();
-    my $text = $c->{opac}->{biblio}->{template};
+    my $text = $c->{template}->{acces};
     my $html = '';
-    $template->process(\$text, { acces => $acces }, \$html)
-        or die "Mauvais template biblio : " . $template->error();
+    $template->process(\$text, { acces => $acces, conf => $conf }, \$html)
+        or $html = "Mauvais template Accès : " . $template->error();
     return $html;
 }
 
@@ -382,13 +524,9 @@ sub tool {
     my $template;
     my $tool = $cgi->param('tool');
     if ( $tool ) {
-        if ($tool eq 'acces') {
-            $template = $self->get_template({ file => 'acces.tt' });
-            $template->param( acces => $self->get_all_acces() );
-        }
-        elsif ($tool eq 'titres') {
-            $template = $self->get_template({ file => 'titres.tt' });
-            $template->param( titres => $self->get_titres() );
+        if ($tool eq 'revues') {
+            $template = $self->get_template({ file => 'revues.tt' });
+            $template->param( revues => $self->get_revues() );
         }
     }
     else {
@@ -403,22 +541,11 @@ sub tool {
 sub intranet_js {
     my $self = shift;
 
-    q|
-      <script>
-        $(document).ready(function(){
-          if ( $('body').is("#tools_tools-home") ) {
-            $('.container-fluid .col-sm-4:nth-child(2) dl').append(
-             '<dt><a href="/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Tamil::Mirabel&method=tool">Koha ⇄ Mir@bel</a></dt>' +
-             '<dd>Interfaçage de Mir@bel avec Koha</dd>');
-          }
-          $('#toplevelmenu li:last-child ul').append(
-            '<li>' +
-            '<a href="/cgi-bin/koha/plugins/run.pl?class=Koha::Plugin::Tamil::Mirabel&method=tool">Koha ⇄ Mir@bel</a>' +
-            '</li>'
-          );
-        });
-      </script>
-    |;
+    my $url = $ENV{REQUEST_URI};
+
+    return $url =~ /detail\.pl/ ? $self->page_mirabel('pro', 'detail') :
+           $url =~ /search\.pl/ ? $self->page_mirabel('pro', 'result') :
+                                 undef;
 }
 
 
@@ -426,63 +553,47 @@ sub opac_js {
     my $self = shift;
 
     my $url = $ENV{REQUEST_URI};
-    return if $url !~ /opac-detail\.pl|opac-main\.pl/;
 
-    return $url =~ /opac-detail/ ? $self->opac_detail()
-                                 : $self->opac_liste();
+    return $url =~ /opac-main\.pl/   ? $self->opac_liste() :
+           $url =~ /opac-detail\.pl/ ? $self->page_mirabel('opac', 'detail') :
+           $url =~ /opac-search\.pl/ ? $self->page_mirabel('opac', 'result') :
+                                       undef;
 }
 
 
-sub opac_detail {
-    my $self = shift;
+sub page_mirabel {
+    my ($self, $where, $page) = @_;
+
     my $c = $self->config();
-
-    return if $c->{opac}->{biblio}->{active} == 0;
-
-    # On ne fait rien si on n'est pas sur la page de détail, sur une notice
-    # qui a un ISSN
-    my $url = $ENV{REQUEST_URI};
-    return unless $url =~ /biblionumber=([0-9]+)/;
-    my $biblionumber = $1;
-    my $sth = C4::Context::dbh->prepare("
-        SELECT issn FROM biblioitems WHERE biblionumber = ?");
-    $sth->execute($biblionumber);
-    my ($issn) = $sth->fetchrow;
-    return unless $issn;
-
-    my $acces = $self->html_acces($issn);
-    return "" unless $acces;
-
-    $acces = encode_json($acces);
-    utf8::decode($acces);
-    my $biblio = $c->{opac}->{biblio};
-    my $location = $biblio->{affiche}->{ou};
-    my $id       = $location eq 'div' ? $biblio->{affiche}->{id} :
-                   $location eq 'ex_dessus' ? '#catalogue_detail_biblio' : 0;
-    my $itemlabel = $biblio->{affiche}->{itemlabel};
+    my $conf = $c->{acces}->{$where}->{$page};
+    
+    return if $conf->{active} == 0;
 
     return <<EOS;
 <script>
 \$(document).ready(function(){
-  function mirabelAcces(location,html) {
-      if (location !== '0') {
-        \$(location).append(html);
-      } else {
-        var tabMenu = "<li class='ui-state-default ui-corner-top' role='tab' tabindex='-1' aria-controls='mirabel' aria-labelledby='ui-id-7' aria-selected='false'><a href='#mirabel' class='ui-tabs-anchor' role='presentation' tabindex='-1' id='ui-id-7'>${itemlabel}</a></li>";
-        var tabs = \$('#bibliodescriptions').tabs();
-        var ul = tabs.find("ul");
-        \$(ul).append(tabMenu);
-        \$(tabs).append(html);
-        tabs.tabs("refresh");
+  function mirabelAcces() {
+    \$('.mirabel-issn').each(function(){
+      const iddiv = \$(this);
+      const issn = \$(this).attr('issn');
+      const date = \$(this).attr('date');
+      let url = `/api/v1/contrib/mirabel/acces/$where/$page?issn=\${issn}`;
+      if (date) {
+        url = `\${url}&date=\${date}`;
       }
+      console.log(url);
+      \$.getJSON(url, function(res) {
+        console.log('trouvé');
+        console.log(iddiv);
+        iddiv.html(res.html);
+        iddiv.show();
+      });
+    });
   }
-
-  mirabelAcces('$id', $acces);
-
+  mirabelAcces();
 });
 </script>
 EOS
-
 }
 
 
@@ -492,7 +603,7 @@ sub opac_liste {
     my $url = $ENV{REQUEST_URI};
     return unless $url =~ /mirabel=liste/;
 
-    my $titres = $self->html_titres();
+    my $titres = $self->html_revues();
     $titres = encode_json($titres);
     utf8::decode($titres);
 
@@ -510,6 +621,19 @@ sub opac_liste {
 </script>
 EOS
 
+}
+
+
+sub api_namespace {
+    return 'mirabel';
+}
+
+
+sub api_routes {
+    my $self = shift;
+    my $spec_str = $self->mbf_read('openapi.json');
+    my $spec     = decode_json($spec_str);
+    return $spec;
 }
 
 1;

@@ -1,0 +1,88 @@
+{
+  "/acces/{where}/{page}": {
+    "get": {
+      "x-mojo-to": "Tamil::Mirabel::Controller#acces",
+      "operationId": "getAcces",
+      "tags": [
+        "fun"
+      ],
+      "parameters": [
+        {
+          "name": "where",
+          "in": "path",
+          "description": "opac ou pro",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "page",
+          "in": "path",
+          "description": "detail ou result",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "issn",
+          "in": "query",
+          "description": "un ou plusieurs ISSN",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "description": "Date de la ressource",
+          "required": false,
+          "type": "string"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Liste des acces par issn",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "404": {
+          "description": "ISBN non trouvé",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "error": {
+                "description": "Error message",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

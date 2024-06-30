@@ -53,6 +53,45 @@ l'étape précédente. Cliquez sur Télécharger.
 Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_
 Mir@bel valide pour activer les fonctionnalités avancée de l'extension.
 
+## Configuration
+
+### Feuille de stype XSL
+
+Le plugin affiche les accès aux revues si la page de résultat d'une recherche
+ou la page de détail d'une notice contient des issn encadrés dans des balises
+de cette forme:
+
+```html
+<div class="mirabel-issn"
+     style="display:none;"
+     issn="1234-5678"
+     date="2020"
+>
+</div>
+```
+
+Cette balise peut être générée par vos feuilles de style XSL, OPAC/PRO,
+résultat/détail. Par exemple, pour une revue :
+
+```xml
+<xsl:if test="marc:datafield[@tag=011]">
+  <div class="mirabel-issn" style="display:none;">
+    <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='a']"/>
+  </div>
+</xsl:if>
+```
+
+Ou par exemple pour un article :
+
+```xml
+<xsl:if test="marc:datafield[@tag=461]/marc:subfield[@code='x']">
+  <div class="mirabel-issn" style="display:none;">
+    <xsl:value-of select="marc:datafield[@tag=461]/marc:subfield[@code='x']"/>
+  </div>
+</xsl:if>
+```
+
+
 ## Utilisation de l'extension
 
 ### Liste des revues
@@ -271,10 +310,13 @@ tableau des accès à la revue. Par exemple :
   qu'ils ne possèdent pas
 * **1.0.8** / sep. 2022 — Pour version récente de Koha
 * **1.0.9** / jui. 2023 - Liste OPAC des titres > 1000
+* **2.0.0** / jui. 2024 - Affichage page de résultat. Templates paramétrables.
+  Filtrage/masquage. Affichage pour notices non revues avec filtrage par date.
+
 
 ## LICENCE
 
-This software is copyright (c) 2022 by Tamil s.a.r.l..
+This software is copyright (c) 2024 by Tamil s.a.r.l..
 
 This is free software; you can redistribute it and/or modify it under the same
 terms as the Perl 5 programming language system itself.
