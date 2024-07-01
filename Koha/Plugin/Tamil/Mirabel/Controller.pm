@@ -17,6 +17,7 @@ sub acces {
     my $issn   = $c->validation->param('issn');
     my $date   = $c->validation->param('date') || '';
     my $conf   = $pc->{acces}->{$where}->{$page};
+    $conf = $date ? $conf->{avec} : $conf->{sans};
 
     my $html   = $plugin->html_acces($issn, $date, $conf);
 

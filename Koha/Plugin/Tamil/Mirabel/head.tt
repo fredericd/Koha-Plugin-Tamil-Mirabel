@@ -22,7 +22,7 @@
      </a>
      <ul>
       <li><a href="?class=[% CLASS %]&method=tool">Accueil </a></li>
-      <li><a href="?class=[% CLASS %]&method=tool&tool=revues">Mes revues</a></li>
+      <li><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl?mirabel=liste" target="_blanck">Mes revues</a></li>
       <li><a href="?class=[% CLASS %]&method=configure">Configuration </a></li>
      </ul>
     </ul>

@@ -8,6 +8,7 @@ use Koha::Cache;
 use Mojo::UserAgent;
 use Mojo::JSON qw(decode_json encode_json);
 use Template;
+use JSON qw/ to_json /;
 use List::Util qw/ first /;
 use YAML;
 
@@ -227,45 +228,15 @@ sub get_form_config {
             revues => undef,
             acces => undef,
         },
-        acces => {
-            opac => {
-                detail => {
-                    active => undef,
-                    mode => undef,
-                    revue => undef,
-                    exclure => undef,
-                    date => undef,
-                    cacher => undef,
-                },
-                result => {
-                    active => undef,
-                    mode => undef,
-                    revue => undef,
-                    exclure => undef,
-                    date => undef,
-                    cacher => undef,
-                },
-            },
-            pro => {
-                detail => {
-                    active => undef,
-                    mode => undef,
-                    revue => undef,
-                    exclure => undef,
-                    date => undef,
-                    cacher => undef,
-                },
-                result => {
-                    active => undef,
-                    mode => undef,
-                    revue => undef,
-                    exclure => undef,
-                    date => undef,
-                    cacher => undef,
-                },
-            },
-        },
     };
+    for my $where (qw/ opac pro /) {
+        for my $page (qw/ detail result /) {
+            for my $date (qw/ sans avec /) {
+                $c->{acces}->{$where}->{$page}->{$date}->{$_} = undef
+                    for qw/active mode revue exclure cacher date/;
+            }
+        }
+    }
 
     my $set;
     $set = sub {
@@ -566,13 +537,13 @@ sub page_mirabel {
 
     my $c = $self->config();
     my $conf = $c->{acces}->{$where}->{$page};
+    $conf = to_json($conf);
     
-    return if $conf->{active} == 0;
-
     return <<EOS;
 <script>
 \$(document).ready(function(){
   function mirabelAcces() {
+    let conf = $conf;
     \$('.mirabel-issn').each(function(){
       const iddiv = \$(this);
       const issn = \$(this).attr('issn');
@@ -580,11 +551,17 @@ sub page_mirabel {
       let url = `/api/v1/contrib/mirabel/acces/$where/$page?issn=\${issn}`;
       if (date) {
         url = `\${url}&date=\${date}`;
+        conf = conf.avec;
+      } else {
+        conf = conf.sans;
       }
       console.log(url);
+      if (! conf.active) {
+        console.log('Pas activé. On quitte.');
+        return;
+      }
       \$.getJSON(url, function(res) {
-        console.log('trouvé');
-        console.log(iddiv);
+        console.log(`trouvé \${issn}`);
         iddiv.html(res.html);
         iddiv.show();
       });

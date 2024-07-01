@@ -44,154 +44,65 @@
  </fieldset>
 
  <fieldset class="rows">
-  <legend>OPAC / Page de détail</legend>
-  <ol>
-   <li>
-    <label for="acces.opac.detail.active">Activer : </label>
-    <input id="acces.opac.detail.active" type="checkbox" name="acces.opac.detail.active"
-           size="15" value="1" [% IF c.acces.opac.detail.active == 1 %]checked[% END %] />
-    l'affichage des accès sur la page de détail de l'OPAC
-   </li>
-   <li>
-    <label for="location">Mode : </label>
-    <input type="radio" name="acces.opac.detail.mode" value="tableau" [% IF c.acces.opac.detail.mode == 'tableau' %]checked[% END %] />tableau
-    <input type="radio" name="acces.opac.detail.mode" value="liste" [% IF c.acces.opac.detail.mode == 'liste' %]checked[% END %] />liste
-   </li>
-   <li>
-    <label for="acces.opac.detail.revue">Revue : </label>
-    <input id="acces.opac.detail.revue" type="checkbox" name="acces.opac.detail.revue" size="15" value="1" [% IF c.acces.opac.detail.revue == 1 %]checked[% END %] />
-    Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
-   </li>
-   <li>
-    <label for="acces.opac.detail.exclure">Exclure :</label>
-    <input id="acces.opac.detail.exclure" type="text" name="acces.opac.detail.exclure" size="50" value="[% c.acces.opac.detail.exclure %]" />
-    <br/>
-    On peut exclure par contenu (Intégral/Sommaire/Indexation/Résumé), que l'on
-    peut associé à la diffusion (libre/restreint/abonné/possesion). Par exemple
-    pour exclure Sommaire et Intégral restreint, saisir
-    <code>Sommaire,Intégral-restreintRésumé</code>. Les critères d'exclusion sont
-    séparés par des virgules. Pour chaque critère, on peut spécifier une diffusion
-    en séparant contenue et diffusion par un tiret.
-   </li>
-   <li>
-    <label for="acces.opac.detail.date">Date :</label>
-    <input id="acces.opac.detail.date" type="checkbox" name="acces.opac.detail.date" size="15" value="1" [% IF c.acces.opac.detail.date == 1 %]checked[% END %] />
-    Exclure les accès dont l'intervalle ne correspond pas à la date de la notice Koha.
-   </li>
-   <li>
-    <label for="acces.opac.detail.cacher">Cacher :</label>
-    <input id="acces.opac.detail.cacher" type="text" name="acces.opac.detail.cacher" size="50" value="[% c.acces.opac.detail.cacher %]" />
-    <br/>
-    On peut cacher : contenu (Intégral/Résumé, etc.) / diffusion
-    (libre/restreint). Par exemple pour ne pas afficher contenu et diffusion, saisir
-    <code>contenu,diffusion</code>
-   </li>
-  </ol>
- </fieldset>
-
- <fieldset class="rows">
-  <legend>OPAC / Page de résultat</legend>
-  <ol>
-   <li>
-    <label for="acces.opac.result.active">Activer : </label>
-    <input id="acces.opac.result.active" type="checkbox" name="acces.opac.result.active"
-           size="15" value="1" [% IF c.acces.opac.result.active == 1 %]checked[% END %] />
-    l'affichage des accès sur la page de résultat de l'OPAC
-   </li>
-   <li>
-    <label for="location">Mode : </label>
-    <input type="radio" name="acces.opac.result.mode" value="tableau" [% IF c.acces.opac.result.mode == 'tableau' %]checked[% END %] />tableau
-    <input type="radio" name="acces.opac.result.mode" value="liste" [% IF c.acces.opac.result.mode == 'liste' %]checked[% END %] />liste
-   </li>
-   <li>
-    <label for="acces.opac.result.revue">Revue : </label>
-    <input id="acces.opac.result.revue" type="checkbox" name="acces.opac.result.revue" size="15" value="1" [% IF c.acces.opac.result.revue == 1 %]checked[% END %] />
-    Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
-   </li>
-   <li>
-    <label for="acces.opac.result.exclure">Exclure :</label>
-    <input id="acces.opac.result.exclure" type="text" name="acces.opac.result.exclure" size="50" value="[% c.acces.opac.result.exclure %]" />
-   </li>
-   <li>
-    <label for="acces.opac.result.date">Date :</label>
-    <input id="acces.opac.result.date" type="checkbox" name="acces.opac.result.date" size="15" value="1" [% IF c.acces.opac.result.date == 1 %]checked[% END %] />
-    Exclure les accès dont l'intervalle ne correspond pas à la date de la notice Koha.
-   </li>
-   <li>
-    <label for="acces.opac.result.cacher">Cacher :</label>
-    <input id="acces.opac.result.cacher" type="text" name="acces.opac.result.cacher" size="50" value="[% c.acces.opac.result.cacher %]" />
-   </li>
-  </ol>
- </fieldset>
-
- <fieldset class="rows">
-  <legend>PRO / Page de détail</legend>
-  <ol>
-   <li>
-    <label for="acces.pro.detail.active">Activer : </label>
-    <input id="acces.pro.detail.active" type="checkbox" name="acces.pro.detail.active"
-           size="15" value="1" [% IF c.acces.pro.detail.active == 1 %]checked[% END %] />
-    l'affichage des accès sur la page de résultat de l'OPAC
-   </li>
-   <li>
-    <label for="location">Mode : </label>
-    <input type="radio" name="acces.pro.detail.mode" value="tableau" [% IF c.acces.pro.detail.mode == 'tableau' %]checked[% END %] />tableau
-    <input type="radio" name="acces.pro.detail.mode" value="liste" [% IF c.acces.pro.detail.mode == 'liste' %]checked[% END %] />liste
-   </li>
-   <li>
-    <label for="acces.pro.detail.revue">Revue : </label>
-    <input id="acces.pro.detail.revue" type="checkbox" name="acces.pro.detail.revue" size="15" value="1" [% IF c.acces.pro.detail.revue == 1 %]checked[% END %] />
-    Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
-   </li>
-   <li>
-    <label for="acces.pro.detail.exclure">Exclure :</label>
-    <input id="acces.pro.detail.exclure" type="text" name="acces.pro.detail.exclure" size="50" value="[% c.acces.pro.detail.exclure %]" />
-   </li>
-   <li>
-    <label for="acces.pro.detail.date">Date :</label>
-    <input id="acces.pro.detail.date" type="checkbox" name="acces.pro.detail.date" size="15" value="1" [% IF c.acces.pro.detail.date == 1 %]checked[% END %] />
-    Exclure les accès dont l'intervalle ne correspond pas à la date de la notice Koha.
-   </li>
-   <li>
-    <label for="acces.pro.detail.cacher">Cacher :</label>
-    <input id="acces.pro.detail.cacher" type="text" name="acces.pro.detail.cacher" size="50" value="[% c.acces.pro.detail.cacher %]" />
-   </li>
-  </ol>
- </fieldset>
-
- <fieldset class="rows">
-  <legend>PRO / Page de résultat</legend>
-  <ol>
-   <li>
-    <label for="acces.pro.result.active">Activer : </label>
-    <input id="acces.pro.result.active" type="checkbox" name="acces.pro.result.active"
-           size="15" value="1" [% IF c.acces.pro.result.active == 1 %]checked[% END %] />
-    l'affichage des accès sur la page de résultat de l'OPAC
-   </li>
-   <li>
-    <label for="location">Mode : </label>
-    <input type="radio" name="acces.pro.result.mode" value="tableau" [% IF c.acces.pro.result.mode == 'tableau' %]checked[% END %] />tableau
-    <input type="radio" name="acces.pro.result.mode" value="liste" [% IF c.acces.pro.result.mode == 'liste' %]checked[% END %] />liste
-   </li>
-   <li>
-    <label for="acces.pro.result.revue">Revue : </label>
-    <input id="acces.pro.result.revue" type="checkbox" name="acces.pro.result.revue" size="15" value="1" [% IF c.acces.pro.result.revue == 1 %]checked[% END %] />
-    Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
-   </li>
-   <li>
-    <label for="acces.pro.result.exclure">Exclure :</label>
-    <input id="acces.pro.result.exclure" type="text" name="acces.pro.result.exclure" size="50" value="[% c.acces.pro.result.exclure %]" />
-   </li>
-   <li>
-    <label for="acces.pro.result.date">Date :</label>
-    <input id="acces.pro.result.date" type="checkbox" name="acces.pro.result.date" size="15" value="1" [% IF c.acces.pro.result.date == 1 %]checked[% END %] />
-    Exclure les accès dont l'intervalle ne correspond pas à la date de la notice Koha.
-   </li>
-   <li>
-    <label for="acces.pro.result.cacher">Cacher :</label>
-    <input id="acces.pro.result.cacher" type="text" name="acces.pro.result.cacher" size="50" value="[% c.acces.pro.result.cacher %]" />
-   </li>
-  </ol>
+  <legend>Affichage des accès</legend>
+  [% FOREACH where IN ['opac', 'pro'] %]
+   [% FOREACH page IN ['detail', 'result'] %]
+    [% FOREACH date IN ['sans', 'avec'] %]
+     <div style="margin-bottom: 5px; padding-top: 15px; font-weight: bold;">
+      [% where %] > [% page %] > [% date %] date
+     </div>
+     <ol>
+      <li>
+       <label for="acces.[% where %].[% page %].[% date %].active">Activer : </label>
+       <input type="checkbox"
+              id="acces.[% where %].[% page %].[% date %].active"
+              name="acces.[% where %].[% page %].[% date %].active"
+              size="15" value="1" [% IF c.acces.$where.$page.$date.active == 1 %]checked[% END %] />
+       l'affichage des accès
+      </li>
+      <li>
+       <label for="location">Mode : </label>
+       <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="tableau"
+              [% IF c.acces.$where.$page.$date.mode == 'tableau' %]checked[% END %] />tableau
+       <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="liste"
+              [% IF c.acces.$where.$page.$date.mode == 'liste' %]checked[% END %] />liste
+      </li>
+      <li>
+       <label for="acces.[% where %].[% page %].[% date %].revue">Revue : </label>
+       <input type="checkbox"
+              id="acces.[% where %].[% page %].[% date %].revue"
+              name="acces.[% where %].[% page %].[% date %].revue" size="15" value="1"
+              [% IF c.acces.$where.$page.$date.revue == 1 %]checked[% END %] />
+       Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
+      </li>
+      <li>
+       <label for="acces.[% where %].[% page %].[% date %].exclure">Exclure :</label>
+       <input type="text"
+              id="acces.[% where %].[% page %].[% date %].exclure"
+              name="acces.[% where %].[% page %].[% date %].exclure" size="50"
+              value="[% c.acces.$where.$page.$date.exclure %]" />
+      </li>
+      <li>
+       <label for="acces.[% where %].[% page %].[% date %]cacher">Cacher :</label>
+       <input type="text"
+              id="acces.[% where %].[% page %].[% date %].cacher"
+              name="acces.[% where %].[% page %].[% date %].cacher" size="50"
+              value="[% c.acces.$where.$page.$date.cacher %]" />
+      </li>
+      [% IF date == 'avec' %]
+       <li>
+        <label for="acces.[% where %].[% page %].[% date %]">Date :</label>
+        <input type="checkbox"
+               id="acces.[% where %].[% page %].[% date %].date"
+               name="acces.[% where %].[% page %].[% date %].date" size="15" value="1"
+               [% IF c.acces.$where.$page.$date.date == 1 %]checked[% END %] />
+        Activer le filtrage par date
+       </li>
+      [% END %]
+     </ol>
+    [% END %]
+   [% END %]
+  [% END %]
  </fieldset>
 
  <fieldset class="rows">
