@@ -55,20 +55,27 @@
     <tbody>
      <tr>
       <td>
-	   <input type="radio" name="select.where" value="opac" checked />OPAC
-	   <input type="radio" name="select.where" value="pro" />PRO
+	   <input type="radio" name="select.where" value="opac" checked />
+       <span id="select_where_opac">OPAC</span>
+	   <input type="radio" name="select.where" value="pro" />
+       <span id="select_where_pro">PRO</span>
 	  </td>
       <td>
-	   <input type="radio" name="select.page" value="detail" checked />Détail
-	   <input type="radio" name="select.page" value="result" />Résultat
+	   <input type="radio" name="select.page" value="detail" checked />
+       <span id="select_page_detail">Détail</span>
+	   <input type="radio" name="select.page" value="result" />
+       <span id="select_page_result">Résultat</span>
 	  </td>
       <td>
 	   <input type="radio" name="select.date" value="sans" checked />Sans date
-	   <input type="radio" name="select.date" value="avec" />Avec date
+       <span id="select_date_sans">Sans date</span>
+	   <input type="radio" name="select.date" value="avec" />
+       <span id="select_date_avec">Avec date</span>
       </td>
      </tr>
     </tbody>
    </table>
+   <h3 id="breadcrumb" style="margin-left:15px; padding-top: 5px;"></h3>
   </div>
   [% FOREACH where IN ['opac', 'pro'] %]
    [% FOREACH page IN ['detail', 'result'] %]
@@ -163,7 +170,13 @@ $(document).ready(function() {
    const where = $("input[name='select.where']:checked").val();
    const page = $("input[name='select.page']:checked").val();
    const date = $("input[name='select.date']:checked").val();
-   $(`#acces_${where}_${page}_${date}`).show();
+   const id = $(`#acces_${where}_${page}_${date}`);
+   id.show();
+   const breadcrumb =
+    $(`#select_where_${where}`).text() + ' > ' +
+    $(`#select_page_${page}`).text() + ' > ' +
+    $(`#select_date_${date}`).text();
+   $('#breadcrumb').html(breadcrumb);
   });
  };
  $("input[name^='select.']").click(show);
