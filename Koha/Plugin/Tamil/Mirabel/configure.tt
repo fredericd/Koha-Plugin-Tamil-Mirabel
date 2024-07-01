@@ -45,61 +45,70 @@
 
  <fieldset class="rows">
   <legend>Affichage des accès</legend>
+  <div>
+   <input type="radio" name="select.where" value="opac" checked />OPAC
+   <input type="radio" name="select.where" value="pro" />PRO
+   <br/>
+   <input type="radio" name="select.page" value="detail" checked />Détail
+   <input type="radio" name="select.page" value="result" />Résultat
+   <br/>
+   <input type="radio" name="select.date" value="sans" checked />Sans date
+   <input type="radio" name="select.date" value="avec" />Avec date
+  </div>
   [% FOREACH where IN ['opac', 'pro'] %]
    [% FOREACH page IN ['detail', 'result'] %]
     [% FOREACH date IN ['sans', 'avec'] %]
-     <div style="margin-bottom: 5px; padding-top: 15px; font-weight: bold;">
-      [% where %] > [% page %] > [% date %] date
-     </div>
-     <ol>
-      <li>
-       <label for="acces.[% where %].[% page %].[% date %].active">Activer : </label>
-       <input type="checkbox"
-              id="acces.[% where %].[% page %].[% date %].active"
-              name="acces.[% where %].[% page %].[% date %].active"
-              size="15" value="1" [% IF c.acces.$where.$page.$date.active == 1 %]checked[% END %] />
-       l'affichage des accès
-      </li>
-      <li>
-       <label for="location">Mode : </label>
-       <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="tableau"
-              [% IF c.acces.$where.$page.$date.mode == 'tableau' %]checked[% END %] />tableau
-       <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="liste"
-              [% IF c.acces.$where.$page.$date.mode == 'liste' %]checked[% END %] />liste
-      </li>
-      <li>
-       <label for="acces.[% where %].[% page %].[% date %].revue">Revue : </label>
-       <input type="checkbox"
-              id="acces.[% where %].[% page %].[% date %].revue"
-              name="acces.[% where %].[% page %].[% date %].revue" size="15" value="1"
-              [% IF c.acces.$where.$page.$date.revue == 1 %]checked[% END %] />
-       Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
-      </li>
-      <li>
-       <label for="acces.[% where %].[% page %].[% date %].exclure">Exclure :</label>
-       <input type="text"
-              id="acces.[% where %].[% page %].[% date %].exclure"
-              name="acces.[% where %].[% page %].[% date %].exclure" size="50"
-              value="[% c.acces.$where.$page.$date.exclure %]" />
-      </li>
-      <li>
-       <label for="acces.[% where %].[% page %].[% date %]cacher">Cacher :</label>
-       <input type="text"
-              id="acces.[% where %].[% page %].[% date %].cacher"
-              name="acces.[% where %].[% page %].[% date %].cacher" size="50"
-              value="[% c.acces.$where.$page.$date.cacher %]" />
-      </li>
-      [% IF date == 'avec' %]
+     <div id="acces_[% where %]_[% page %]_[% date %]">
+      <ol>
        <li>
-        <label for="acces.[% where %].[% page %].[% date %]">Date :</label>
+        <label for="acces.[% where %].[% page %].[% date %].active">Activer : </label>
         <input type="checkbox"
-               id="acces.[% where %].[% page %].[% date %].date"
-               name="acces.[% where %].[% page %].[% date %].date" size="15" value="1"
-               [% IF c.acces.$where.$page.$date.date == 1 %]checked[% END %] />
-        Activer le filtrage par date
+               id="acces.[% where %].[% page %].[% date %].active"
+               name="acces.[% where %].[% page %].[% date %].active"
+               size="15" value="1" [% IF c.acces.$where.$page.$date.active == 1 %]checked[% END %] />
+        l'affichage des accès
        </li>
-      [% END %]
-     </ol>
+       <li>
+        <label for="location">Mode : </label>
+        <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="tableau"
+               [% IF c.acces.$where.$page.$date.mode == 'tableau' %]checked[% END %] />tableau
+        <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="liste"
+               [% IF c.acces.$where.$page.$date.mode == 'liste' %]checked[% END %] />liste
+       </li>
+       <li>
+        <label for="acces.[% where %].[% page %].[% date %].revue">Revue : </label>
+        <input type="checkbox"
+               id="acces.[% where %].[% page %].[% date %].revue"
+               name="acces.[% where %].[% page %].[% date %].revue" size="15" value="1"
+               [% IF c.acces.$where.$page.$date.revue == 1 %]checked[% END %] />
+        Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
+       </li>
+       <li>
+        <label for="acces.[% where %].[% page %].[% date %].exclure">Exclure :</label>
+        <input type="text"
+               id="acces.[% where %].[% page %].[% date %].exclure"
+               name="acces.[% where %].[% page %].[% date %].exclure" size="50"
+               value="[% c.acces.$where.$page.$date.exclure %]" />
+       </li>
+       <li>
+        <label for="acces.[% where %].[% page %].[% date %]cacher">Cacher :</label>
+        <input type="text"
+               id="acces.[% where %].[% page %].[% date %].cacher"
+               name="acces.[% where %].[% page %].[% date %].cacher" size="50"
+               value="[% c.acces.$where.$page.$date.cacher %]" />
+       </li>
+       [% IF date == 'avec' %]
+        <li>
+         <label for="acces.[% where %].[% page %].[% date %]">Date :</label>
+         <input type="checkbox"
+                id="acces.[% where %].[% page %].[% date %].date"
+                name="acces.[% where %].[% page %].[% date %].date" size="15" value="1"
+                [% IF c.acces.$where.$page.$date.date == 1 %]checked[% END %] />
+         Activer le filtrage par date
+        </li>
+       [% END %]
+      </ol>
+     </div>
     [% END %]
    [% END %]
   [% END %]
@@ -126,5 +135,24 @@
  </fieldset>
 
 </form>
-
+<script>
+$(document).ready(function() {
+ const show = function() {
+  ['opac','pro'].forEach((w) => {
+   ['detail','result'].forEach((p) => {
+    ['sans','avec'].forEach((d) => {
+     const name = `#acces_${w}_${p}_${d}`;
+     $(name).hide();
+    });
+   });
+   const where = $("input[name='select.where']:checked").val();
+   const page = $("input[name='select.page']:checked").val();
+   const date = $("input[name='select.date']:checked").val();
+   $(`#acces_${where}_${page}_${date}`).show();
+  });
+ };
+ $("input[name^='select.']").click(show);
+ show();
+});
+</script>
 [% INCLUDE "$PLUGIN_DIR/foot.tt" %]
