@@ -46,14 +46,29 @@
  <fieldset class="rows">
   <legend>Affichage des accès</legend>
   <div>
-   <input type="radio" name="select.where" value="opac" checked />OPAC
-   <input type="radio" name="select.where" value="pro" />PRO
-   <br/>
-   <input type="radio" name="select.page" value="detail" checked />Détail
-   <input type="radio" name="select.page" value="result" />Résultat
-   <br/>
-   <input type="radio" name="select.date" value="sans" checked />Sans date
-   <input type="radio" name="select.date" value="avec" />Avec date
+   <table class="table table-sm table-hover" style="margin-bottom: 0px;">
+    <thead class="thead-dark">
+     <th style="text-align:left;">Interface</th>
+     <th style="text-align:left;">Page</th>
+     <th style="text-align:left;">Date</th>
+    </thead>
+    <tbody>
+     <tr>
+      <td>
+	   <input type="radio" name="select.where" value="opac" checked />OPAC
+	   <input type="radio" name="select.where" value="pro" />PRO
+	  </td>
+      <td>
+	   <input type="radio" name="select.page" value="detail" checked />Détail
+	   <input type="radio" name="select.page" value="result" />Résultat
+	  </td>
+      <td>
+	   <input type="radio" name="select.date" value="sans" checked />Sans date
+	   <input type="radio" name="select.date" value="avec" />Avec date
+      </td>
+     </tr>
+    </tbody>
+   </table>
   </div>
   [% FOREACH where IN ['opac', 'pro'] %]
    [% FOREACH page IN ['detail', 'result'] %]
