@@ -1,4 +1,4 @@
-# Extension Koha ⇄ Mir@bel
+# Plugin Koha ⇄ Mir@bel
 
 **Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha
 en y intégrant les accès en ligne aux revues repérées dans Mir@bel.
@@ -14,7 +14,7 @@ d'accès sont également disponibles. Mir@bel est géré par un réseau de
 autorisés à mettre à jour Mir@bel et à récupérer localement les informations de
 Mir@bel au moyen de services web.
 
-L'extension Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son
+Le plugin Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son
 Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans son OPAC Koha
 les informations de la base de connaissances Mir@bel. Ces échanges sont réalisés
 au moyens des [Service Web](https://reseau-mirabel.info/api) de Mir@bel.
@@ -29,7 +29,8 @@ Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
    Mir@bel aux ressources sont affichés.
 
 Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le
-plugin. Seule la liste des accès sera affichée sur la page de détail.
+plugin. Seule la liste des accès sera affichée sur les pages détail/résultat en
+OPAC/PRO.
 
 ## Installation
 
@@ -43,16 +44,16 @@ points suivants :
   20.05. 
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
-l'archive de l'Extension **[Koha ⇄
+l'archive du plugin **[Koha ⇄
 Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.0.0.kpz)**.
 
 **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de
 Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à
 l'étape précédente. Cliquez sur Télécharger.
 
-**Configuration** — Dans les Outils de plugins, vous voyez l'Extension *Koha ⇄
+**Configuration** — Dans les Outils de plugins, vous voyez le plugin *Koha ⇄
 Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_
-Mir@bel valide pour activer les fonctionnalités avancées de l'extension.
+Mir@bel valide pour activer les fonctionnalités avancées du plugin.
 
 ## Configuration
 
@@ -89,7 +90,10 @@ section, ainsi qu'au moyen des feuilles de style XSL de Koha.
 - **Sans date / avec date** — On peut choisir les paramètres d'affichage des
   accès en fonction du type de notice Koha : périodique, extrait, ouvrage d'une
   collection. Pour certains de ces types, on peut extraire la date et s'en
-  servir pour filtrer les accès. 
+  servir pour filtrer les accès. Généralement, les notices **sans date** sont
+  des notices de revues ou de titre de périodique, tandis que les notices
+  **avec date** (en 100 ou 210/214) sont des notices d'articles, d'extraits de
+  périodique, d'ouvrage d'une collection.
 
 - **XSL** — Les feuilles de style XSL de Koha doivent être modifiées pour
   présenter au plugin Koha ⇄ Mir@bel des ISSN de revue à rechercher dans
@@ -147,7 +151,7 @@ choisit les paramètres suivants :
 
 - **Date** — Pour les emplacements des notices Koha avec date (extrait par
   exemple), on peut choisir de filtrer les accès pour ne montrer que ceux dont
-  l'interval de date correspond à la date de la ressource Koha.
+  l'intervalle de dates correspond à la date de la ressource Koha.
 
 ### Feuille de style XSL
 
@@ -226,7 +230,7 @@ utilisé dans Koha : [Template Toolkit](http://www.template-toolkit.org).
 
 #### Accès
 
-L'extension Mir@bel envoie au template deux variables, `conf` et  `acces`. La
+Le plugin Mir@bel envoie au template deux variables, `conf` et  `acces`. La
 variable `conf` contient les paramètes de l'emplacement de l'accès. Par
 exemple, `conf.mode` contient `tableau` ou `liste`. La variable `acces`
 contient les accès Mir@bel :
@@ -297,8 +301,8 @@ Créez un lien vers cette URL sur la page d'Accueil de votre OPAC. Par exemple :
 ```
 
 
-L'extension Koha ⇄ Mir@el envoie au template une variable contenant un tableau
-de revue, contenant un tableau de titres ordonnées du plus récent au plus
+Le plugin Koha ⇄ Mir@el envoie au template une variable contenant un tableau
+de revue, contenant un tableau de titres ordonnés du plus récent au plus
 ancien.
 
 Par exemple :
