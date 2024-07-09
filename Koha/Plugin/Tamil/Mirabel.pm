@@ -430,7 +430,7 @@ sub acces_filter {
             my $keep = 1;
             my $debut = $_->{datedebut};
             $debut = $1 if $debut =~ /^([0-9]{4})/;
-            my $fin = $_->{datefin};
+            my $fin = $_->{datefin} || 2999;
             $fin = $1 if $fin =~ /^([0-9]{4})/;
             $keep = 0 if $debut && $date < $debut;
             $keep = 0 if $fin && $date > $ fin;
