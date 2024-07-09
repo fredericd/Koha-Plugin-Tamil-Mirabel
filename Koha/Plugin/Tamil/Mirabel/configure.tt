@@ -2,7 +2,7 @@
 
 <h1>Configuration de Koha ⇄ Mir@bel</h1>
 
-<form method="get">
+<form method="post">
 
  <input type="hidden" name="class" value="[% CLASS %]"/>
  <input type="hidden" name="method" value="[% METHOD %]"/>

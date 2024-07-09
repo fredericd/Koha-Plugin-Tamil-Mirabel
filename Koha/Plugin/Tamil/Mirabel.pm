@@ -549,14 +549,15 @@ sub page_mirabel {
       const issn = \$(this).attr('issn');
       const date = \$(this).attr('date');
       let url = `/api/v1/contrib/mirabel/acces/$where/$page?issn=\${issn}`;
+      let active;
       if (date) {
         url = `\${url}&date=\${date}`;
-        conf = conf.avec;
+        active = conf.avec.active;
       } else {
-        conf = conf.sans;
+        active = conf.sans.active;
       }
       console.log(url);
-      if (! conf.active) {
+      if (! active) {
         console.log('Pas activé. On quitte.');
         return;
       }
