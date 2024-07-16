@@ -67,7 +67,7 @@
        <span id="select_page_result">Résultat</span>
 	  </td>
       <td>
-	   <input type="radio" name="select.date" value="sans" checked />Sans date
+	   <input type="radio" name="select.date" value="sans" checked />
        <span id="select_date_sans">Sans date</span>
 	   <input type="radio" name="select.date" value="avec" />
        <span id="select_date_avec">Avec date</span>

@@ -453,10 +453,11 @@ sub acces_filter {
 sub get_acces {
     my ($self, $id, $date, $conf) = @_;
 
-    my $key = "acces_$id";
+    my $mode = $conf->{revue} ? 'rev' : 'tit';
+    my $key = "$mode-$id";
     my $acces = $self->{cache}->get_from_cache($key);
     unless ($acces) {
-        my $url = $conf->{revue} ? '/acces/revue' : '/acces/titres';
+        my $url = $mode eq 'rev' ? '/acces/revue' : '/acces/titres';
         if ( $acces = $self->ws($url, { issn => $id }) ) {
              if (ref($acces) eq 'HASH' && $acces->{code}) {
                  $acces = [];
