@@ -67,7 +67,8 @@ services web.
 - **Timeout** : La durée en seconde de la mise en cache des informations
   retrouvées dans Mir@bel. Cela permet de limiter le nombre de requêtes
   envoyées à Mir@bel. Pour une mise en cache d'une journée, entrez la valeur
-  `86400`.
+  `86400`. Dans la phase de test du paramétrage du plugin, il est préférable de
+  fixer un délai de cache très court, de `10` secondes par exmple.
 
 ### Partenaire Mir@bel
 
