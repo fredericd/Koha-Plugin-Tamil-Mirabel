@@ -67,8 +67,8 @@ services web.
 - **Timeout** : La durée en seconde de la mise en cache des informations
   retrouvées dans Mir@bel. Cela permet de limiter le nombre de requêtes
   envoyées à Mir@bel. Pour une mise en cache d'une journée, entrez la valeur
-  `86400`. Dans la phase de test du paramétrage du plugin, il est préférable de
-  fixer un délai de cache très court, de `10` secondes par exmple.
+  `86400`. En phase de test, choisissez une valeur basse de mise en cache, par
+  exemple `60` secondes.
 
 ### Partenaire Mir@bel
 
@@ -94,13 +94,15 @@ section, ainsi qu'au moyen des feuilles de style XSL de Koha.
   servir pour filtrer les accès. Généralement, les notices **sans date** sont
   des notices de revues ou de titre de périodique, tandis que les notices
   **avec date** (en 100 ou 210/214) sont des notices d'articles, d'extraits de
-  périodique, d'ouvrage d'une collection.
+  périodique, d'ouvrage d'une collection. 
 
 - **XSL** — Les feuilles de style XSL de Koha doivent être modifiées pour
   présenter au plugin Koha ⇄ Mir@bel des ISSN de revue à rechercher dans
   Mir@bel. Par exemple, pour afficher des accès Mir@bel sur la page de résultat
   de l'OPAC, il faut à la fois activer la fonctionnalité en configuration du
-  plugin et modifier la feuille XSL de la page de résultat de l'OPAC.
+  plugin et modifier la feuille XSL de la page de résultat de l'OPAC. C'est
+  également via la feuille de style qu'on positionne des accès avec ou sans
+  date les pages détail/résultat.
 
 #### Paramètres par emplacement
 
@@ -152,13 +154,14 @@ choisit les paramètres suivants :
 
 - **Date** — Pour les emplacements des notices Koha avec date (extrait par
   exemple), on peut choisir de filtrer les accès pour ne montrer que ceux dont
-  l'intervalle de dates correspond à la date de la ressource Koha.
+  l'intervalle de dates correspond à la date de la ressource Koha. La date
+  utilisée est paramétré via la feuille XSL.
 
 ### Feuille de style XSL
 
 Le plugin affiche les accès aux revues si la page de résultat d'une recherche
 ou la page de détail d'une notice contient des issn encadrés dans des balises
-de cette forme:
+de cette forme, respectivement avec et sans date :
 
 ```html
 <div class="mirabel-issn" style="display:none;" issn="1234-5678" />
@@ -190,36 +193,80 @@ Ou pour un article avec date :
       <xsl:value-of select="marc:datafield[@tag=461]/marc:subfield[@code='x']"/>
     </xsl:attribute>
     <xsl:attribute name="date">
-      <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
-        <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
-      </xsl:if>
+      <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
     </xsl:attribute>
   </span>
 </xsl:if>
 ```
 
-Ou pour une collection avec ISSN en 225 ou 410 :
+Ou pour une collection avec ISSN en 410 et ma date en 100$a :
 
 ```xml
-<xsl:if test="marc:datafield[@tag=410]/marc:subfield[@code='x'] or marc:datafield[@tag=225]/marc:subfield[@code='x']">
+<xsl:if test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
   <span class="mirabel-issn" style="display:nonee;">
     <xsl:attribute name="issn">
-      <xsl:choose>
-        <xsl:when test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
-          <xsl:value-of select="marc:datafield[@tag=410]/marc:subfield[@code='x']"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="marc:datafield[@tag=225]/marc:subfield[@code='x']"/>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+      <xsl:value-of select="marc:datafield[@tag=410]/marc:subfield[@code='x']"/>
+    </xsl:attribut>
     <xsl:attribute name="date">
-      <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
-        <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
-      </xsl:if>
+      <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
     </xsl:attribute>
   </span>
 </xsl:if>
+```
+
+Et pour finir, un exemple complet de template XSL pouvant être appelé ensuite
+depuis les pages de détail et de résultat :
+
+```xml
+<xsl:template name="mirabel_acces">
+  <div class="mirabel-container">
+    <xsl:if test="marc:datafield[@tag=011]/marc:subfield[@code='a'] or marc:datafield[@tag=011]/marc:subfield[@code='f']">
+      <span class="mirabel-issn" style="display:none;">
+        <xsl:attribute name="issn">
+          <xsl:choose>
+            <xsl:when test="marc:datafield[@tag=011]/marc:subfield[@code='a']">
+              <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='a']"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='f']"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </span>
+    </xsl:if>
+    <xsl:if test="marc:datafield[@tag=461]/marc:subfield[@code='x']">
+      <span class="mirabel-issn" style="display:none;">
+        <xsl:attribute name="issn">
+          <xsl:value-of select="marc:datafield[@tag=461]/marc:subfield[@code='x']"/>
+        </xsl:attribute>
+        <xsl:attribute name="date">
+          <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+            <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
+          </xsl:if>
+        </xsl:attribute>
+      </span>
+    </xsl:if>
+    <xsl:if test="marc:datafield[@tag=410]/marc:subfield[@code='x'] or marc:datafield[@tag=225]/marc:subfield[@code='x']">
+      <span class="mirabel-issn" style="display:nonee;">
+        <xsl:attribute name="issn">
+          <xsl:choose>
+            <xsl:when test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
+              <xsl:value-of select="marc:datafield[@tag=410]/marc:subfield[@code='x']"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="marc:datafield[@tag=225]/marc:subfield[@code='x']"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+        <xsl:attribute name="date">
+          <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+            <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
+          </xsl:if>
+        </xsl:attribute>
+      </span>
+    </xsl:if>
+  </div>
+</xsl:template>
 ```
 
 ### Templates
