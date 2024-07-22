@@ -204,6 +204,12 @@ sub config {
     $c->{url}->{timeout} ||= 600;
     $c->{template}->{revues} ||= $DEFAULT_TEMPLATE_REVUES;
     $c->{template}->{acces} ||= $DEFAULT_TEMPLATE_ACCES;
+    $c->{acces}->{sort} ||= <<EOS;
+contenu:Intégral,Résumé,Sommaire,Indexation
+datedebut:asc
+diffusion:libre,abonné,restreint
+ressource:asc
+EOS
     $c->{metadata} = $self->{metadata};
 
     $self->{args}->{c} = $c;
@@ -227,6 +233,9 @@ sub get_form_config {
         template => {
             revues => undef,
             acces => undef,
+        },
+        acces => {
+            sort => undef,
         },
     };
     for my $where (qw/ opac pro /) {
@@ -253,6 +262,7 @@ sub get_form_config {
                 #$value = '' unless defined($value);
                 #$node->{$subkey} = $value;
                 my @values = $cgi->multi_param("$key");
+                @values = map { s/\r//g; $_; } @values;
                 $node->{$subkey} = join(',', @values);
             }
         }
@@ -440,10 +450,41 @@ sub acces_filter {
     }
     
     # Tri
+    my $c = $self->config();
+    my $sort = $c->{acces}->{sort};
+    $sort = [ split /\n/, $sort ];
+    $logger->debug(Dump($sort));
+    my $key = sub {
+        my $a = shift;
+        my @k;
+        for my $k (@$sort) {
+            my ($what, $order) = split /:/, $k;
+            my $value = $a->{$what};
+            next unless $value;
+            if ($order =~ /desc/) {
+                if ($what =~ /date/) {
+                    $value = 3000 - $value;
+                }
+            }
+            if ($order =~ /,/) {
+                my @order = split /,/, $order;
+                my $k;
+                for (my $i=0; $i < @order; $i++) {
+                    $k = $i + 1 if $value eq $order[$i];
+                }
+                $k = 9 unless $k;
+                $value = "$k~$value";
+            }
+            push @k, $value;
+        }
+        my $k = join('-', @k);
+        return $k;
+    };
+    for my $a (@$acces) {
+        $logger->debug("CLÉ: " . $key->($a));
+    }
     $acces = [ sort {
-        ($a->{datedebut} . $a->{contenu} . $a->{ressource})
-          cmp
-        ($b->{datedebut} . $b->{contenu} . $b->{ressource})
+        $key->($a) cmp $key->($b);
     } @$acces ];
 
     return $acces;

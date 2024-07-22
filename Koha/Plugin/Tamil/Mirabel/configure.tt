@@ -62,15 +62,15 @@
 	  </td>
       <td>
 	   <input type="radio" name="select.page" value="detail" checked />
-       <span id="select_page_detail">Détail</span>
+       <span id="select_page_detail">Détail d'une notice</span>
 	   <input type="radio" name="select.page" value="result" />
-       <span id="select_page_result">Résultat</span>
+       <span id="select_page_result">Résultat de recherche</span>
 	  </td>
       <td>
 	   <input type="radio" name="select.date" value="sans" checked />
-       <span id="select_date_sans">Sans date</span>
+       <span id="select_date_sans">Sans date (revues & collections)</span>
 	   <input type="radio" name="select.date" value="avec" />
-       <span id="select_date_avec">Avec date</span>
+       <span id="select_date_avec">Avec date (articles, autres)</span>
       </td>
      </tr>
     </tbody>
@@ -134,6 +134,16 @@
     [% END %]
    [% END %]
   [% END %]
+ </fieldset>
+
+ <fieldset class="rows">
+  <legend>Tri des accès</legend>
+  <ol>
+   <li>
+    <label for="acces.sort">Ordre de tri: </label>
+    <pre><textarea id="acces.sort" name="acces.sort" rows="4" cols="100">[% c.acces.sort %]</textarea></pre>
+   </li>
+  </old>
  </fieldset>
 
  <fieldset class="rows">

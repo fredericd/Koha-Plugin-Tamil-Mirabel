@@ -92,9 +92,9 @@ section, ainsi qu'au moyen des feuilles de style XSL de Koha.
   accès en fonction du type de notice Koha : périodique, extrait, ouvrage d'une
   collection. Pour certains de ces types, on peut extraire la date et s'en
   servir pour filtrer les accès. Généralement, les notices **sans date** sont
-  des notices de revues ou de titre de périodique, tandis que les notices
-  **avec date** (en 100 ou 210/214) sont des notices d'articles, d'extraits de
-  périodique, d'ouvrage d'une collection. 
+  des notices de revues, de titre de périodique ou de collection, tandis que
+  les notices **avec date** (en 100 ou 210/214) sont des notices d'articles,
+  d'extraits de périodique, d'ouvrage d'une collection. 
 
 - **XSL** — Les feuilles de style XSL de Koha doivent être modifiées pour
   présenter au plugin Koha ⇄ Mir@bel des ISSN de revue à rechercher dans
@@ -152,10 +152,37 @@ choisit les paramètres suivants :
   contenu,diffusion
   ```
 
-- **Date** — Pour les emplacements des notices Koha avec date (extrait par
-  exemple), on peut choisir de filtrer les accès pour ne montrer que ceux dont
-  l'intervalle de dates correspond à la date de la ressource Koha. La date
-  utilisée est paramétré via la feuille XSL.
+- **Date** — Pour les emplacements des notices Koha avec date (article, extrait
+  par exemple), on peut choisir de filtrer les accès pour ne montrer que ceux
+  dont l'intervalle de dates correspond à la date de la ressource Koha. La date
+  utilisée est paramétrée via la feuille XSL.
+
+#### Tri des accès
+
+Par défaut, les accès sont affichés dans un ordre qui dépend du type de
+contenu, de la date de début de l'accès, du mode de diffusion et du nom de la
+ressource. Ce tri à quatre niveaux est paramétré au moyen d'une équation qu'il
+est possible de modifier. Voici cette formule de tri par défaut :
+
+```
+contenu:Intégral,Résumé,Sommaire,Indexation
+datedebut:asc
+diffusion:libre,abonné,restreint
+ressource:asc
+```
+
+Chaque ligne représente un niveau de tri et contient deux parties séparées par
+deux points (:), d'un côté le champ de l'accès utilisé pour le tri, de l'autre
+l'ordre de tri. On tri d'abord (première ligne) par `contenu`. Ce champ d'un
+accès peut contenir quatre valeurs. On spécifie l'ordre d'affichage des
+contenus : d'abord _Intégral_, puis _Résumé_, etc. On tri ensuite (deuxième
+ligne) par le champ `datedebut` qui est l'année de début de l'accès. On demande
+un tri ascendant : asc. On peut demander un tri descendant : desc. Les deux
+derniers niveaux de tri sont spécifiés de manière similaire aux deux premiers.
+
+Notez que si vous supprimez en configuration la zone de saisie _Ordre de tri_
+et que vous enregistrez, l'équation de tri est réinitialisée à la valeur par
+défaut ci-dessus.
 
 ### Feuille de style XSL
 
@@ -274,12 +301,15 @@ depuis les pages de détail et de résultat :
 Il y a un template d'affichage pour l'affichage des **accès** et un autre pour
 l'affichage de la liste des **revues**. Vous pouvez modifier les templates
 fournis par défaut. Le système de traitement de template est le même que celui
-utilisé dans Koha : [Template Toolkit](http://www.template-toolkit.org).
+utilisé dans Koha : [Template Toolkit](http://www.template-toolkit.org). Si vos
+modification d'un template introduit une erreur de syntaxe, l'affichage
+accès/liste ne fonctionnera plus, mais la ligne où se trouve l'erreur sera
+affichée à la place.
 
 #### Accès
 
 Le plugin Mir@bel envoie au template deux variables, `conf` et  `acces`. La
-variable `conf` contient les paramètes de l'emplacement de l'accès. Par
+variable `conf` contient les paramètres de l'emplacement de l'accès. Par
 exemple, `conf.mode` contient `tableau` ou `liste`. La variable `acces`
 contient les accès Mir@bel :
 
