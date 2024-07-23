@@ -47,13 +47,18 @@ points suivants :
 l'archive du plugin **[Koha ⇄
 Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.0.0.kpz)**.
 
-**Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils de
-Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive téléchargée à
-l'étape précédente. Cliquez sur Télécharger.
+- **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils
+  de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive
+  téléchargée à l'étape précédente. Cliquez sur Télécharger.
 
-**Configuration** — Dans les Outils de plugins, vous voyez le plugin *Koha ⇄
-Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID Partenaire_
-Mir@bel valide pour activer les fonctionnalités avancées du plugin.
+  Le plugin utilise par ailleurs un module Perl qu'on ne trouve pas en
+  standard avec Koha : `Pithub::Markdown`. Il faut l'installer sur votre
+  serveur Koha.
+
+- **Configuration** — Dans les Outils de plugins, vous voyez le plugin *Koha ⇄
+  Mir@bel*. Cliquez sur Actions > Configurer. Il faudra saisir un _ID
+  Partenaire_ Mir@bel valide pour activer les fonctionnalités avancées du
+  plugin.
 
 ## Configuration
 

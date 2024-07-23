@@ -1,52 +1,19 @@
 [% INCLUDE "$PLUGIN_DIR/head.tt" %]
 
-<div class="row">
- <h1>Koha ⇄ Mir@bel</h1>
-</div>
+<style>
+.markdown {
+  font-size: 100%;
+}
+.markdown h2 {
+  margin-top: 20px;
+}
+.markdown img {
+  width: 100%;
+}
+</style>
 
 <div class="row">
- <div class="col-md-6">
-  <p>
-   Mir@bel est une <b>base de connaissances mutualisée des accès en-ligne aux
-   revues en sciences humaines francophones</b>. Les conditions d'accès aux
-   revues peuvent être libre, restreintes ou sous abonnement. Il y a des accès
-   au texte intégral des revues, aux sommaires des numéros, à l'indexation des
-   articles ou à leur résumé. La période de publication de la revue couverte par
-   chaque accès, ainsi que les lacunes et les conditions d'accès sont également
-   disponibles. Mir@bel est géré par un réseau de <b>partenaires</b>. Ce sont
-   les bibliothèques et centres de documentation qui sont autorisés à mettre à
-   jour Mir@bel et à récupérer localement les informations de Mir@bel au moyen
-   de services web.
-  </p>
-</div>
-<div class="col-md-6">
-  <p>
-   <b>Koha ⇄ Mir@bel</b> permet à un Partenaire de Mir@bel qui
-   gère son Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans
-   son OPAC Koha les informations de la base de connaissances Mir@bel. Les
-   informations Mir@bel apparaissent à l'OPAC à deux endroits :
-  </p>
-  <ol>
-   <li>
-    <p>
-     <b>LISTE DES REVUES</b> — Une URL de l'OPAC affiche la liste de toutes les
-     revues du partenaires avec pour chacune les points d'accès signalés.
-    <p>
-    <pre>_OPAC Koha_/cgi-bin/koha/opac-main.pl?mirabel=liste</pre>
-   </li>
-   <li>
-    <p>
-     <b>LISTE DES ACCÈS</b> — À l'OPAC et en PRO, dans la page de détail d'une
-     notice bibliographique et la page de résultat d'une recherche, les accès
-     Mir@bel aux ressources sont affichés.
-    </p>
-   </li>
-  </ol>
-  <p> 
-   <b>Pour les non-partenaires</b>, Koha ⇄ Mir@bel permet d'afficher sur la
-   page de détail d'une notice bibliographique les accès publics à une revue.
-  </p>
- </div>
+  [% markdown %]
 </div>
 
 [% INCLUDE "$PLUGIN_DIR/foot.tt" %]
