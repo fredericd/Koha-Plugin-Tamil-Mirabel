@@ -461,6 +461,8 @@ sub acces_filter {
             my ($what, $order) = split /:/, $k;
             my $value = $a->{$what};
             next unless $value;
+            # Ne garder que l'année des champs date
+            $value = $1 if $what =~ /date/ && $value =~ /^([0-9]{4})/;
             if ($order =~ /desc/) {
                 if ($what =~ /date/) {
                     $value = 3000 - $value;
