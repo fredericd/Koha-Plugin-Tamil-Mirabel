@@ -231,7 +231,7 @@ Ou pour un article avec date :
 </xsl:if>
 ```
 
-Ou pour une collection avec ISSN en 410 et ma date en 100$a :
+Ou pour une collection avec ISSN en 410 et la date en 100$a :
 
 ```xml
 <xsl:if test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
