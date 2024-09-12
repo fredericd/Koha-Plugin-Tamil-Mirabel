@@ -157,10 +157,10 @@ choisit les paramètres suivants :
   contenu,diffusion
   ```
 
-- **Date** — Pour les emplacements des notices Koha avec date (article, extrait
-  par exemple), on peut choisir de filtrer les accès pour ne montrer que ceux
-  dont l'intervalle de dates correspond à la date de la ressource Koha. La date
-  utilisée est paramétrée via la feuille XSL.
+- **Date** — Pour les notices Koha avec date (article, extrait par exemple), on
+  peut choisir de filtrer les accès pour ne montrer que ceux dont l'intervalle
+  de dates correspond à la date de la ressource Koha. La date utilisée est
+  paramétrée via la feuille XSL.
 
 #### Tri des accès
 
