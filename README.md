@@ -247,57 +247,53 @@ Ou pour une collection avec ISSN en 410 et la date en 100$a :
 ```
 
 Et pour finir, un exemple complet de template XSL pouvant être appelé ensuite
-depuis les pages de détail et de résultat :
+depuis les pages de détail et de résultat. Ce template affiche 1 ou 2 encarts
+Mir@bel selon la logique suivante :
+
+- S'il y a un ISSN en 011 ($a ou $f), un encart Mir@bel est affiché avec
+  recherche de l'ISSN en $a ou celui présent en $f si pas de $a.
+- S'il y a un ISSN en 461, 410 ou 225, un encart Mir@bel est affiché avec
+  l'ISSN du premier champ présent (461 ou 410 ou 225). Le paramètre de date
+  (permettant un filtrage) est alimenté avec la date présente dans la zone 100.
 
 ```xml
 <xsl:template name="mirabel_acces">
-  <div class="mirabel-container">
-    <xsl:if test="marc:datafield[@tag=011]/marc:subfield[@code='a'] or marc:datafield[@tag=011]/marc:subfield[@code='f']">
-      <span class="mirabel-issn" style="display:none;">
-        <xsl:attribute name="issn">
-          <xsl:choose>
-            <xsl:when test="marc:datafield[@tag=011]/marc:subfield[@code='a']">
-              <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='a']"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='f']"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-      </span>
-    </xsl:if>
-    <xsl:if test="marc:datafield[@tag=461]/marc:subfield[@code='x']">
-      <span class="mirabel-issn" style="display:none;">
-        <xsl:attribute name="issn">
-          <xsl:value-of select="marc:datafield[@tag=461]/marc:subfield[@code='x']"/>
-        </xsl:attribute>
-        <xsl:attribute name="date">
-          <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
-            <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
-          </xsl:if>
-        </xsl:attribute>
-      </span>
-    </xsl:if>
-    <xsl:if test="marc:datafield[@tag=410]/marc:subfield[@code='x'] or marc:datafield[@tag=225]/marc:subfield[@code='x']">
-      <span class="mirabel-issn" style="display:nonee;">
-        <xsl:attribute name="issn">
-          <xsl:choose>
-            <xsl:when test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
-              <xsl:value-of select="marc:datafield[@tag=410]/marc:subfield[@code='x']"/>
-            </xsl:when>
-            <xsl:otherwise>
-              <xsl:value-of select="marc:datafield[@tag=225]/marc:subfield[@code='x']"/>
-            </xsl:otherwise>
-          </xsl:choose>
-        </xsl:attribute>
-        <xsl:attribute name="date">
-          <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
-            <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
-          </xsl:if>
-        </xsl:attribute>
-      </span>
-    </xsl:if>
-  </div>
+  <xsl:if test="marc:datafield[@tag=011]">
+    <div class="mirabel-issn" style="display:none;">
+      <xsl:attribute name="issn">
+        <xsl:choose>
+          <xsl:when test="marc:datafield[@tag=011]/marc:subfield[@code='a']">
+            <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='a']"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="marc:datafield[@tag=011]/marc:subfield[@code='f']"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+    </div>
+  </xsl:if>
+  <xsl:if test="marc:datafield[@tag=461]/marc:subfield[@code='x'] or marc:datafield[@tag=410]/marc:subfield[@code='x'] or marc:datafield[@tag=225]/marc:subfield[@code='x']">
+    <div class="mirabel-issn" style="display:none;">
+      <xsl:attribute name="issn">
+        <xsl:choose>
+          <xsl:when test="marc:datafield[@tag=461]/marc:subfield[@code='x']">
+            <xsl:value-of select="marc:datafield[@tag=461]/marc:subfield[@code='x']"/>
+          </xsl:when>
+          <xsl:when test="marc:datafield[@tag=410]/marc:subfield[@code='x']">
+            <xsl:value-of select="marc:datafield[@tag=410]/marc:subfield[@code='x']"/>
+          </xsl:when>
+          <xsl:when test="marc:datafield[@tag=225]/marc:subfield[@code='x']">
+            <xsl:value-of select="marc:datafield[@tag=225]/marc:subfield[@code='x']"/>
+          </xsl:when>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:attribute name="date">
+        <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+          <xsl:value-of select="substring(marc:datafield[@tag=100]/marc:subfield[@code='a'],10,4)"/>
+        </xsl:if>
+      </xsl:attribute>
+    </div>
+  </xsl:if>
 </xsl:template>
 ```
 

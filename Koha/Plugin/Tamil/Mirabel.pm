@@ -26,7 +26,7 @@ our $metadata = {
     minimum_version => '22.11.00.000',
     maximum_version => undef,
     copyright       => '2024',
-    version         => '2.0.0',
+    version         => '2.0.1',
 };
 
 
@@ -52,7 +52,7 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
    [% biblionumber = titre.acces.0.identifiantpartenaire %]
    <li>
     [% IF biblionumber %]
-     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" title="Voir dans le catalogue" target="_blanck">
+     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" title="Voir dans le catalogue" target="_blank">
       [% titre.prefixe %][% titre.titre %]
      </a>
     [% ELSE %]
@@ -110,7 +110,7 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
   <p>
    <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Mir\@bel"/>
    Accès en ligne à la revue via
-   <a href="https://reseau-mirabel.info/revue/titre-id/[% acces.0.titreid %]">Mir\@bel</a>
+   <a href="https://reseau-mirabel.info/revue/titre-id/[% acces.0.titreid %]" target="_blank">Mir\@bel</a>
   </p>
   [% IF conf.mode == 'tableau' %]
    <table class="table table-sm table-condensed table-hover" style="margin-bottom: 0px;">
