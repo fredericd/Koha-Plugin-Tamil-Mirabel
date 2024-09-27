@@ -3,29 +3,30 @@
 **Koha ⇄ Mir@bel** est un plugin de Koha qui étend les fonctionnalités de Koha
 en y intégrant les accès en ligne aux revues repérées dans Mir@bel.
 
-[Mir@bel](https://reseau-mirabel.info) est une **base de connaissances
-mutualisée des accès en ligne aux revues en sciences humaines francophones**.
-Les conditions d'accès aux revues peuvent être libre, restreintes ou sous
-abonnement. Il y a des accès au texte intégral des revues, aux sommaires des
-numéros, à l'indexation des articles ou à leur résumé. La période de publication
-de la revue couverte par chaque accès, ainsi que les lacunes et les conditions
-d'accès sont également disponibles. Mir@bel est géré par un réseau de
-**partenaires**. Ce sont les bibliothèques et centres de documentation qui sont
-autorisés à mettre à jour Mir@bel et à récupérer localement les informations de
-Mir@bel au moyen de services web.
+[Mir@bel](https://reseau-mirabel.info) est une **une base de connaissance
+mutualisée sur les publications périodiques**.  Les conditions d'accès aux
+revues peuvent être libres, restreintes ou sous abonnement. Il y a des accès au
+texte intégral des revues, aux sommaires des numéros, à l'indexation des
+articles ou à leur résumé. La période de publication de la revue couverte par
+chaque accès, ainsi que les lacunes et les conditions d'accès sont également
+disponibles. Mir@bel est géré par un réseau de **partenaires**. Ce sont les
+bibliothèques et centres de documentation qui sont autorisés à mettre à jour
+Mir@bel et à récupérer localement les informations de Mir@bel au moyen de
+services web.
 
 Le plugin Koha ⇄ Mir@bal permet à un Partenaire de Mir@bel qui gère son
-Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans son OPAC Koha
-les informations de la base de connaissances Mir@bel. Ces échanges sont réalisés
-au moyens des [Service Web](https://reseau-mirabel.info/api) de Mir@bel.
+Catalogue de bibliothèque dans le SIGB Koha de faire remonter dans Koha, OPAC
+et PRO, les informations de la base de connaissances Mir@bel. Ces échanges sont
+réalisés au moyens des [Service Web](https://reseau-mirabel.info/api) de
+Mir@bel.
 
-Les informations Mir@bel apparaissent à l'OPAC à deux endroits :
+Les informations Mir@bel apparaissent à l'OPAC à deux emplacements :
 
 1. **Liste des revues** — Une URL de l'OPAC affiche la liste de toutes les
    revues du partenaire avec pour chaque revue ses points d'accès signalés dans
    Mir@bel.
-2. **Liste des accès** — À l'OPAC et en PRO, dans la page de détail d'une
-   notice bibliographique et la page de résultat d'une recherche, les accès
+2. **Liste des accès** — À l'OPAC et en PRO, sur la page de détail d'une
+   notice bibliographique et sur la page de résultat d'une recherche, les accès
    Mir@bel aux ressources sont affichés.
 
 Pour les établissements non-partenaires Mir@bel, il est possible d'utiliser le
@@ -40,8 +41,7 @@ points suivants :
 
 * Dans `koha-conf.xml`, activez les plugins.
 * Dans le fichier de configuration d'Apache, définissez l'alias `/plugins`. 
-* Activez la préférence système `UseKohaPlugins` pour les Koha avant la version
-  20.05. 
+* Activez la préférence système `UseKohaPlugins`.
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
 l'archive du plugin **[Koha ⇄
@@ -490,8 +490,9 @@ arborescent à trois niveaux : Revue > Titre > Accès.
   qu'ils ne possèdent pas
 * **1.0.8** / sep. 2022 — Pour version récente de Koha
 * **1.0.9** / jui. 2023 — Liste OPAC des titres > 1000
-* **2.0.0** / jui. 2024 — Affichage page de résultat. Templates paramétrables.
+* **2.0.0** / sept. 2024 — Affichage page de résultat. Templates paramétrables.
   Filtrage/masquage. Affichage pour notices non revues avec filtrage par date.
+  Paramétrages via feuilles XSL OPAC/PRO. Documentation exhaustive.
 
 
 ## LICENCE
