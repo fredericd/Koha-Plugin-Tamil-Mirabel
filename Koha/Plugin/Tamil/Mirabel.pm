@@ -25,8 +25,8 @@ our $metadata = {
     date_updated    => "2024-07-01",
     minimum_version => '22.11.00.000',
     maximum_version => undef,
-    copyright       => '2024',
-    version         => '2.0.1',
+    copyright       => '2025',
+    version         => '2.0.2',
 };
 
 
@@ -85,6 +85,7 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
          [%IF a.numerofin %]([% a.numerofin %])[% END %]
         [% END %]
         [% IF a.lacunaire %][lacunaire][% END %]
+        [% IF a.selection %][sélection d'articles][% END %]
        </li>
       [% END %]
      </ul>
@@ -137,6 +138,7 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
           ...
         [% END %]
         [% IF a.lacunaire %] [lacunaire][% END %]
+        [% IF a.selection %] [sélection d'articles][% END %]
         [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
        </td>
       <tr>
@@ -159,6 +161,7 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
        [% END %]
       </a>
       [% IF a.lacunaire %] [lacunaire][% END %]
+      [% IF a.selection %] [sélection d'articles][% END %]
       [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
       /
       [% a.ressource %]
@@ -618,13 +621,13 @@ sub page_mirabel {
       } else {
         active = conf.sans.active;
       }
-      console.log(url);
+      // console.log(url);
       if (! active) {
-        console.log('Pas activé. On quitte.');
+        // console.log('Pas activé. On quitte.');
         return;
       }
       \$.getJSON(url, function(res) {
-        console.log(`trouvé \${issn}`);
+        // console.log(`trouvé \${issn}`);
         iddiv.html(res.html);
         iddiv.show();
       });

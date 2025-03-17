@@ -45,7 +45,7 @@ points suivants :
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
 l'archive du plugin **[Koha ⇄
-Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.0.1.kpz)**.
+Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.0.2.kpz)**.
 
 - **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils
   de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive
@@ -493,11 +493,12 @@ arborescent à trois niveaux : Revue > Titre > Accès.
 * **2.0.0** / sept. 2024 — Affichage page de résultat. Templates paramétrables.
   Filtrage/masquage. Affichage pour notices non revues avec filtrage par date.
   Paramétrages via feuilles XSL OPAC/PRO. Documentation exhaustive.
+* **2.0.2** / mars 2025 — Affichage [sélection d'articles]
 
 
 ## LICENCE
 
-This software is copyright (c) 2024 by Tamil s.a.r.l..
+This software is copyright (c) 2025 by Tamil s.a.r.l..
 
 This is free software; you can redistribute it and/or modify it under the same
 terms as the Perl 5 programming language system itself.
