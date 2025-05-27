@@ -26,7 +26,7 @@ our $metadata = {
     minimum_version => '22.11.00.000',
     maximum_version => undef,
     copyright       => '2025',
-    version         => '2.0.2',
+    version         => '2.1.0',
 };
 
 
@@ -280,8 +280,9 @@ sub get_form_config {
 sub configure {
     my ($self, $args) = @_;
     my $cgi = $self->{'cgi'};
+    my $op  = $cgi->param('op') // q{};
 
-    if ( $cgi->param('save') ) {
+    if ( $op eq 'cud-save' ) {
         my $c = get_form_config($cgi);
         $self->store_data({ c => encode_json($c) });
         print $self->{'cgi'}->redirect(
