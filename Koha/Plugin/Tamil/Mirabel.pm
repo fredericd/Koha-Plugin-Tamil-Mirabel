@@ -379,7 +379,7 @@ sub get_revues {
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
             my %titre = map { $_->{titreid} => undef } @$acces;
             my @ids = sort { $a <=> $b } keys %titre;
-            my $OFFSET = 500;
+            my $OFFSET = 200;
             while (@ids) {
                 my @search_ids = splice(@ids, 0, $OFFSET);
                 my $titres = $self->ws("/titres?id=" . join(',', @search_ids), {partenaire => 'delete'});
