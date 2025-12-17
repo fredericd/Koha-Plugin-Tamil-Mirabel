@@ -42,8 +42,8 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
 [% FOREACH titres IN revues %]
  [% premier = titres.0 %]
  <h3>
-  [% premier.titre %]
-  <a href="https://reseau-mirabel.info/revue/[% premier.revueid %]" target="_blank">
+  [% premier.titre | html %]
+  <a href="https://reseau-mirabel.info/revue/[% premier.revueid | html %]" target="_blank">
    <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Dans Mir\@bel"/>
   </a>
  </h3>
@@ -53,10 +53,10 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
    <li>
     [% IF biblionumber %]
      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" title="Voir dans le catalogue" target="_blank">
-      [% titre.prefixe %][% titre.titre %]
+      [% titre.prefixe | html %][% titre.titre | html %]
      </a>
     [% ELSE %]
-     [% titre.prefixe %][% titre.titre %]
+     [% titre.prefixe | html %][% titre.titre | html %]
     [% END %]
     [% IF titre.url %]
      <a href="[% titre.url %]" target="_blank" title="Chez son éditeur">
@@ -315,15 +315,19 @@ sub uninstall() {
     my ($self, $args) = @_;
 }
 
+sub _dumpj {
+    to_json(shift, { pretty => 1 });
+}
 
 sub ws() {
     my ($self, $service, $param) = @_;
 
-    my $c   = $self->config();
-    my $api = $c->{url}->{api};
-    my $cle = $c->{partenaire}->{cle};
-    my $ua  = $self->{ua} ||= Mojo::UserAgent->new;
-    my $url = $api . $service;
+    my $logger = $self->{logger};
+    my $c      = $self->config();
+    my $api    = $c->{url}->{api};
+    my $cle    = $c->{partenaire}->{cle};
+    my $ua     = $self->{ua} ||= Mojo::UserAgent->new;
+    my $url    = $api . $service;
     $param ||= {};
     if ( $param->{partenaire} && $param->{partenaire} eq 'delete' ) {
         delete $param->{partenaire};
@@ -334,8 +338,19 @@ sub ws() {
     $url .= '?' . join('&', map { "$_=" . $param->{$_} } keys %$param)
       if keys %$param;
 
+
+    $logger->debug("Appel Mir\@bel: $url");
     my $res = $ua->get($url)->result;
-    return $res ? $res->json : undef;
+    if ($res->code ne '200') {
+        $logger->error("Erreur appel Mir\@bel: $url\n" .
+            to_json($res->error, { pretty => 1 }));
+        return undef;
+    }
+    if ($res) {
+        $res = $res->json;
+        $logger->debug(to_json($res, { pretty => 1 }));
+    }
+    return $res;
 }
 
 
@@ -415,6 +430,7 @@ sub acces_filter {
 
     # Exclure certains accès identifiés par contenu/diffusion
     if (my @exclure = split /,/, $conf->{exclure}) {
+        $logger->debug('Exclure: ' . _dumpj(\@exclure));
         my %exclure;
         for my $contenu (@exclure) {
             if ($contenu =~ /^(.*)-(.*)$/) {
@@ -434,6 +450,8 @@ sub acces_filter {
                     $keep = 0;
                 }
             }
+            $logger->debug('Accès exclu: ' . _dumpj($_))
+                if $keep == 0;
             $keep;
         } @$acces ];
     }
@@ -458,7 +476,7 @@ sub acces_filter {
     my $c = $self->config();
     my $sort = $c->{acces}->{sort};
     $sort = [ split /\n/, $sort ];
-    $logger->debug(Dump($sort));
+    $logger->debug("Tri:\n" . to_json($sort, { pretty => 1 }));
     my $key = sub {
         my $a = shift;
         my @k;
@@ -487,12 +505,13 @@ sub acces_filter {
         my $k = join('-', @k);
         return $k;
     };
-    for my $a (@$acces) {
-        $logger->debug("CLÉ: " . $key->($a));
-    }
+    my @debug_cles = map { $key->($_) } @$acces;
+    $logger->debug("Cles des accès avant tri: " . to_json(\@debug_cles, { pretty => 1 }));
     $acces = [ sort {
         $key->($a) cmp $key->($b);
     } @$acces ];
+    @debug_cles = map { $key->($_) } @$acces;
+    $logger->debug("Cles des accès après tri: " . to_json(\@debug_cles, { pretty => 1 }));
 
     return $acces;
 }
@@ -622,13 +641,11 @@ sub page_mirabel {
       } else {
         active = conf.sans.active;
       }
-      // console.log(url);
       if (! active) {
         // console.log('Pas activé. On quitte.');
         return;
       }
       \$.getJSON(url, function(res) {
-        // console.log(`trouvé \${issn}`);
         iddiv.html(res.html);
         iddiv.show();
       });
