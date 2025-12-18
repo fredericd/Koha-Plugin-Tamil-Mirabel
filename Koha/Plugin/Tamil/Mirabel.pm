@@ -379,10 +379,10 @@ sub get_revues {
             $acces = [ sort { $a->{ressource} cmp $b->{ressource} } @$acces ];
             my %titre = map { $_->{titreid} => undef } @$acces;
             my @ids = sort { $a <=> $b } keys %titre;
-            my $OFFSET = 200;
+            my $MAX = 200; # Max de titres que l'API Mir@bel peut retourner
             while (@ids) {
-                my @search_ids = splice(@ids, 0, $OFFSET);
-                my $titres = $self->ws("/titres?id=" . join(',', @search_ids), {partenaire => 'delete'});
+                my @search_ids = splice(@ids, 0, $MAX);
+                my $titres = $self->ws("/titres?id=" . join(',', @search_ids), { partenaire => 'delete' &});
                 $titre{$_->{id}} = $_  for @$titres;
             }
             for my $a (@$acces) {
