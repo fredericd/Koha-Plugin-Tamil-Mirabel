@@ -18,12 +18,12 @@
    <div id="navmenu">
     <ul>
      <a href="https://reseau-mirabel.info" alt="Site web du réseau Mir@bel">
-      <img src="[% PLUGIN_PATH %]/img/logo-mirabel.png"/>
+      <img src="[% PLUGIN_PATH | html %]/img/logo-mirabel.png"/>
      </a>
      <ul>
-      <li><a href="?class=[% CLASS %]&method=tool">Accueil </a></li>
-      <li><a href="[% OPACBaseURL %]/cgi-bin/koha/opac-main.pl?mirabel=liste" target="_blanck">Mes revues</a></li>
-      <li><a href="?class=[% CLASS %]&method=configure">Configuration </a></li>
+      <li><a href="?class=[% CLASS | html %]&method=tool">Accueil </a></li>
+      <li><a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-main.pl?mirabel=liste" target="_blanck">Mes revues</a></li>
+      <li><a href="?class=[% CLASS | html %]&method=configure">Configuration </a></li>
      </ul>
     </ul>
    </div>

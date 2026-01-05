@@ -18,11 +18,11 @@
   <tbody>
    [% FOREACH a IN acces %]
     <tr>
-      <td><a href="[% a.url %]">[% a.ressource %]</a></td>
-      <td>[% a.titre.titre %]</td>
-      <td>[% a.contenu %]</td>
-      <td>[% a.diffusion %]</td>
-      <td>[% a.datedebut %] - [% a.datefin %]</td>
+      <td><a href="[% a.url | html %]">[% a.ressource | html %]</a></td>
+      <td>[% a.titre.titre | html %]</td>
+      <td>[% a.contenu | html %]</td>
+      <td>[% a.diffusion | html %]</td>
+      <td>[% a.datedebut | html %] - [% a.datefin | html %]</td>
     </tr>
    [% END %]
   </tbody>

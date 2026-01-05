@@ -5,8 +5,8 @@
 <form method="post">
  [% INCLUDE 'csrf-token.inc' %]
 
- <input type="hidden" name="class" value="[% CLASS %]"/>
- <input type="hidden" name="method" value="[% METHOD %]"/>
+ <input type="hidden" name="class" value="[% CLASS | html %]"/>
+ <input type="hidden" name="method" value="[% METHOD | html %]"/>
  <input type="hidden" name="op" value="cud-save"/>
 
  <fieldset class="rows">
@@ -14,15 +14,15 @@
   <ol>
    <li>
     <label for="url.web">Site Web :</label>
-    <input id="url.web" type="text" name="url.web" size="50" value="[% c.url.web %]" />
+    <input id="url.web" type="text" name="url.web" size="50" value="[% c.url.web | html %]" />
    </li>
    <li>
     <label for="url.api">Services web :</label>
-    <input id="url.api" type="text" name="url.api" size="50" value="[% c.url.api %]" />
+    <input id="url.api" type="text" name="url.api" size="50" value="[% c.url.api | html %]" />
    </li>
    <li>
     <label for="url.timeout">Timeout en secondes :</label>
-    <input id="url.timeout" type="text" name="url.timeout" size="50" value="[% c.url.timeout %]" />
+    <input id="url.timeout" type="text" name="url.timeout" size="50" value="[% c.url.timeout | html %]" />
    </li>
   </ol>
  </fieldset>
@@ -36,11 +36,11 @@
   <ol>
    <li>
     <label for="partenaire.id">ID Partenaire : </label>
-    <input id="partenaire.id" type="text" name="partenaire.id" size="15" value="[% c.partenaire.id %]" />
+    <input id="partenaire.id" type="text" name="partenaire.id" size="15" value="[% c.partenaire.id | html %]" />
    </li>
    <li>
     <label for="partenaire.cle">Clé privée : </label>
-    <input id="partenaire.cle" type="text" name="partenaire.cle" size="15" value="[% c.partenaire.cle %]" />
+    <input id="partenaire.cle" type="text" name="partenaire.cle" size="15" value="[% c.partenaire.cle | html %]" />
    </li>
   </ol>
  </fieldset>
@@ -82,51 +82,51 @@
   [% FOREACH where IN ['opac', 'pro'] %]
    [% FOREACH page IN ['detail', 'result'] %]
     [% FOREACH date IN ['sans', 'avec'] %]
-     <div id="acces_[% where %]_[% page %]_[% date %]">
+     <div id="acces_[% where | html %]_[% page | html %]_[% date | html %]">
       <ol>
        <li>
-        <label for="acces.[% where %].[% page %].[% date %].active">Activer : </label>
+        <label for="acces.[% where | html %].[% page | html %].[% date | html %].active">Activer : </label>
         <input type="checkbox"
-               id="acces.[% where %].[% page %].[% date %].active"
-               name="acces.[% where %].[% page %].[% date %].active"
+               id="acces.[% where | html %].[% page | html %].[% date | html %].active"
+               name="acces.[% where | html %].[% page | html %].[% date | html %].active"
                size="15" value="1" [% IF c.acces.$where.$page.$date.active == 1 %]checked[% END %] />
         l'affichage des accès
        </li>
        <li>
         <label for="location">Mode : </label>
-        <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="tableau"
+        <input type="radio" name="acces.[% where | html %].[% page | html %].[% date | html %].mode" value="tableau"
                [% IF c.acces.$where.$page.$date.mode == 'tableau' %]checked[% END %] />tableau
-        <input type="radio" name="acces.[% where %].[% page %].[% date %].mode" value="liste"
+        <input type="radio" name="acces.[% where | html %].[% page | html %].[% date | html %].mode" value="liste"
                [% IF c.acces.$where.$page.$date.mode == 'liste' %]checked[% END %] />liste
        </li>
        <li>
-        <label for="acces.[% where %].[% page %].[% date %].revue">Revue : </label>
+        <label for="acces.[% where | html %].[% page | html %].[% date | html %].revue">Revue : </label>
         <input type="checkbox"
-               id="acces.[% where %].[% page %].[% date %].revue"
-               name="acces.[% where %].[% page %].[% date %].revue" size="15" value="1"
+               id="acces.[% where | html %].[% page | html %].[% date | html %].revue"
+               name="acces.[% where | html %].[% page | html %].[% date | html %].revue" size="15" value="1"
                [% IF c.acces.$where.$page.$date.revue == 1 %]checked[% END %] />
         Afficher les accès de tous les titres de la revue (revues qui ont changé de titre)
        </li>
        <li>
-        <label for="acces.[% where %].[% page %].[% date %].exclure">Exclure :</label>
+        <label for="acces.[% where | html %].[% page | html %].[% date | html %].exclure">Exclure :</label>
         <input type="text"
-               id="acces.[% where %].[% page %].[% date %].exclure"
-               name="acces.[% where %].[% page %].[% date %].exclure" size="50"
-               value="[% c.acces.$where.$page.$date.exclure %]" />
+               id="acces.[% where | html %].[% page | html %].[% date | html %].exclure"
+               name="acces.[% where | html %].[% page | html %].[% date | html %].exclure" size="50"
+               value="[% c.acces.$where.$page.$date.exclure | html %]" />
        </li>
        <li>
-        <label for="acces.[% where %].[% page %].[% date %]cacher">Cacher :</label>
+        <label for="acces.[% where | html %].[% page | html %].[% date | html %]cacher">Cacher :</label>
         <input type="text"
-               id="acces.[% where %].[% page %].[% date %].cacher"
-               name="acces.[% where %].[% page %].[% date %].cacher" size="50"
-               value="[% c.acces.$where.$page.$date.cacher %]" />
+               id="acces.[% where | html %].[% page | html %].[% date | html %].cacher"
+               name="acces.[% where | html %].[% page | html %].[% date | html %].cacher" size="50"
+               value="[% c.acces.$where.$page.$date.cacher | html %]" />
        </li>
        [% IF date == 'avec' %]
         <li>
-         <label for="acces.[% where %].[% page %].[% date %]">Date :</label>
+         <label for="acces.[% where | html %].[% page | html %].[% date | html %]">Date :</label>
          <input type="checkbox"
-                id="acces.[% where %].[% page %].[% date %].date"
-                name="acces.[% where %].[% page %].[% date %].date" size="15" value="1"
+                id="acces.[% where | html %].[% page | html %].[% date | html %].date"
+                name="acces.[% where | html %].[% page | html %].[% date | html %].date" size="15" value="1"
                 [% IF c.acces.$where.$page.$date.date == 1 %]checked[% END %] />
          Activer le filtrage par date
         </li>
@@ -143,7 +143,7 @@
   <ol>
    <li>
     <label for="acces.sort">Ordre de tri: </label>
-    <pre><textarea id="acces.sort" name="acces.sort" rows="4" cols="100">[% c.acces.sort %]</textarea></pre>
+    <pre><textarea id="acces.sort" name="acces.sort" rows="4" cols="100">[% c.acces.sort | html %]</textarea></pre>
    </li>
   </old>
  </fieldset>
@@ -153,11 +153,11 @@
   <ol>
    <li>
     <label for="template.acces">Les accès : </label>
-    <pre><textarea id="template.acces" name="template.acces" rows="15" cols="100">[% c.template.acces %]</textarea></pre>
+    <pre><textarea id="template.acces" name="template.acces" rows="15" cols="100">[% c.template.acces | html %]</textarea></pre>
    </li>
    <li>
     <label for="template.revues">Liste des revues : </label>
-    <pre><textarea id="template.revues" name="template.revues" rows="15" cols="100">[% c.template.revues %]</textarea></pre>
+    <pre><textarea id="template.revues" name="template.revues" rows="15" cols="100">[% c.template.revues | html %]</textarea></pre>
     <br>Attention ! Soyez prudent si vous modifiez un template par défaut.</span>
    </li>
   </ol>

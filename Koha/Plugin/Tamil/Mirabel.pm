@@ -52,37 +52,37 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
    [% biblionumber = titre.acces.0.identifiantpartenaire %]
    <li>
     [% IF biblionumber %]
-     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" title="Voir dans le catalogue" target="_blank">
+     <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" title="Voir dans le catalogue" target="_blank">
       [% titre.prefixe | html %][% titre.titre | html %]
      </a>
     [% ELSE %]
      [% titre.prefixe | html %][% titre.titre | html %]
     [% END %]
     [% IF titre.url %]
-     <a href="[% titre.url %]" target="_blank" title="Chez son éditeur">
+     <a href="[% titre.url | html %]" target="_blank" title="Chez son éditeur">
       <span style="background-color: #a0a0a0; padding: 2px;  color:white; font-size:11px;">É</span>
      </a>
     [% END %]
     :
-    [% titre.datedebut %]-[% titre.datefin %],
-    [% IF titre.periodicite %][% titre.periodicite %], [% END %]
+    [% titre.datedebut | html %]-[% titre.datefin | html %],
+    [% IF titre.periodicite %][% titre.periodicite | html %], [% END %]
     [% FOREACH editeur IN titre.editeurs %]
-     [% editeur %][% IF ! loop.last %], [% END %]
+     [% editeur | html %][% IF ! loop.last %], [% END %]
     [% END %]
     [% IF titre.acces %]
      <ul>
       [% FOREACH a IN titre.acces %]
        <li>
-        <a href="[% a.urlproxy || a.url %]">[% a.ressource %]</a>,
-        [% a.contenu %], [% a.diffusion %],
+        <a href="[% a.urlproxy | html || a.url %]">[% a.ressource | html %]</a>,
+        [% a.contenu | html %], [% a.diffusion | html %],
         [% IF a.datedebut %]
-         [% a.datedebut %]
-         [%IF a.numerodebut %]([% a.numerodebut %])[% END %]
+         [% a.datedebut | html %]
+         [% IF a.numerodebut %]([% a.numerodebut | html %])[% END %]
         [% END %]
         [% IF a.datefin %]
          -
-         [% a.datefin %]
-         [%IF a.numerofin %]([% a.numerofin %])[% END %]
+         [% a.datefin | html %]
+         [% IF a.numerofin %]([% a.numerofin | html %])[% END %]
         [% END %]
         [% IF a.lacunaire %][lacunaire][% END %]
         [% IF a.selection %][sélection d'articles][% END %]
@@ -111,7 +111,7 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
   <p>
    <img src="https://reseau-mirabel.info/images/favicon.ico" width="16px" title="Mir\@bel"/>
    Accès en ligne à la revue via
-   <a href="https://reseau-mirabel.info/revue/titre-id/[% acces.0.titreid %]" target="_blank">Mir\@bel</a>
+   <a href="https://reseau-mirabel.info/revue/titre-id/[% acces.0.titreid | html %]" target="_blank">Mir\@bel</a>
   </p>
   [% IF conf.mode == 'tableau' %]
    <table class="table table-sm table-condensed table-hover" style="margin-bottom: 0px;">
@@ -124,22 +124,22 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
     <tbody>
      [% FOREACH a IN acces %]
       <tr>
-       <td><a href="[% a.urlproxy || a.url %]">[% a.contenu %]</a></td>
-       <td>[% a.ressource %]</td>
-       <td>[% a.diffusion %]</td>
+       <td><a href="[% a.urlproxy || a.url | html %]">[% a.contenu | html %]</a></td>
+       <td>[% a.ressource | html %]</td>
+       <td>[% a.diffusion | html %]</td>
        <td>
-        [% a.datedebut %]
-        [% IF a.numerodebut %]([% a.numerodebut %])[% END %]
+        [% a.datedebut | html %]
+        [% IF a.numerodebut %]([% a.numerodebut | html %])[% END %]
         —
         [% IF a.datefin != "" %]
-          [% a.datefin %]
-          [% IF a.numerofin %]([% a.numerofin %])[% END %]
+          [% a.datefin | html %]
+          [% IF a.numerofin %]([% a.numerofin | html %])[% END %]
         [% ELSE %]
           ...
         [% END %]
         [% IF a.lacunaire %] [lacunaire][% END %]
         [% IF a.selection %] [sélection d'articles][% END %]
-        [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
+        [% IF a.dateinfo %] / [% a.dateinfo | html %][% END %]
        </td>
       <tr>
      [% END %]
@@ -149,24 +149,24 @@ my $DEFAULT_TEMPLATE_ACCES = <<EOS;
    <ul>
     [% FOREACH a IN acces %]
      <li>
-      <a href="[% a.urlproxy || a.url %]">
-       [% a.datedebut %]
-       [% IF a.numerodebut %]([% a.numerodebut %])[% END %]
+      <a href="[% a.urlproxy || a.url | html %]">
+       [% a.datedebut | html %]
+       [% IF a.numerodebut %]([% a.numerodebut | html %])[% END %]
        —
        [% IF a.datefin != "" %]
-        [% a.datefin %]
-        [% IF a.numerofin %]([% a.numerofin %])[% END %]
+        [% a.datefin | html %]
+        [% IF a.numerofin %]([% a.numerofin | html %])[% END %]
        [% ELSE %]
         ...
        [% END %]
       </a>
       [% IF a.lacunaire %] [lacunaire][% END %]
       [% IF a.selection %] [sélection d'articles][% END %]
-      [% IF a.dateinfo %] / [% a.dateinfo %][% END %]
+      [% IF a.dateinfo %] / [% a.dateinfo | html %][% END %]
       /
-      [% a.ressource %]
-      [% UNLESS conf.cacher.search('contenu') %]; [% a.contenu %][% END %]
-      [% UNLESS conf.cacher.search('diffusion') %]; [% a.diffusion %][% END %]
+      [% a.ressource | html %]
+      [% UNLESS conf.cacher.search('contenu') %]; [% a.contenu | html %][% END %]
+      [% UNLESS conf.cacher.search('diffusion') %]; [% a.diffusion | html %][% END %]
      </li>
     [% END %]
    </ul>
@@ -382,7 +382,7 @@ sub get_revues {
             my $MAX = 200; # Max de titres que l'API Mir@bel peut retourner
             while (@ids) {
                 my @search_ids = splice(@ids, 0, $MAX);
-                my $titres = $self->ws("/titres?id=" . join(',', @search_ids), { partenaire => 'delete' &});
+                my $titres = $self->ws("/titres?id=" . join(',', @search_ids), { partenaire => 'delete' });
                 $titre{$_->{id}} = $_  for @$titres;
             }
             for my $a (@$acces) {

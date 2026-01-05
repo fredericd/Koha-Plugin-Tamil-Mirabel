@@ -4,10 +4,10 @@
 </div>
 
 <div style="text-align:center; ">
- <img src="[%PLUGIN_PATH%]/img/tamil-logo-small.png"/>
+ <img src="[% PLUGIN_PATH | html %]/img/tamil-logo-small.png"/>
  <br/>
- &copy; [% c.metadata.copyright %]
- — Version [% c.metadata.version %]
+ &copy; [% c.metadata.copyright | html %]
+ — Version [% c.metadata.version | html %]
 </div>
 
 [% INCLUDE 'intranet-bottom.inc' %]
