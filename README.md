@@ -45,7 +45,7 @@ points suivants :
 
 **▼ TÉLÉCHARGEMENT ▼** — Récupérez sur le site [Tamil](https://www.tamil.fr)
 l'archive du plugin **[Koha ⇄
-Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.1.0.kpz)**.
+Mir@bel](https://www.tamil.fr/download/koha-plugin-tamil-mirabel-2.1.1.kpz)**.
 
 - **Installation** — Dans l'interface pro de Koha, allez dans Outils > Outils
   de Plugins. Cliquez sur Télécharger un plugin. Choisissez l'archive
@@ -495,6 +495,7 @@ arborescent à trois niveaux : Revue > Titre > Accès.
   Paramétrages via feuilles XSL OPAC/PRO. Documentation exhaustive.
 * **2.0.2** / mars 2025 — Affichage [sélection d'articles]
 * **2.1.0** / mai 2025 — CSRF protection for Koha 24.05+
+* **2.1.1** / jan 2026 — Sécurisation, fix API, amélioration debug
 
 
 ## LICENCE
