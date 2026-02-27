@@ -26,7 +26,7 @@ our $metadata = {
     minimum_version => '22.11.00.000',
     maximum_version => undef,
     copyright       => '2025',
-    version         => '2.1.1',
+    version         => '2.1.2',
 };
 
 
@@ -73,7 +73,7 @@ my $DEFAULT_TEMPLATE_REVUES = <<EOS;
      <ul>
       [% FOREACH a IN titre.acces %]
        <li>
-        <a href="[% a.urlproxy | html || a.url %]">[% a.ressource | html %]</a>,
+        <a href="[% a.urlproxy || a.url | html %]">[% a.ressource | html %]</a>,
         [% a.contenu | html %], [% a.diffusion | html %],
         [% IF a.datedebut %]
          [% a.datedebut | html %]
